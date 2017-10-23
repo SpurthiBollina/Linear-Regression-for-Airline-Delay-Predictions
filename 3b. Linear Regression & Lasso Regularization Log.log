@@ -1,0 +1,783 @@
+1    dm 'clear log';
+2    %let UID= 652258189 ;
+3    %let libpath=C:\Users\Chandana Reddy\Desktop\Spurthi\SAS\sasdata;
+4    %let pdfpath=C:\Users\Chandana Reddy\Desktop\Spurthi\SAS ;
+5
+6    libname HW3 "&libpath." ;
+NOTE: Libref HW3 was successfully assigned as follows:
+      Engine:        V9
+      Physical Name: C:\Users\Chandana Reddy\Desktop\Spurthi\SAS\sasdata
+7    ods pdf file="&pdfpath.\HW3-&UID..pdf" ;
+NOTE: Writing ODS PDF output to DISK destination
+      "C:\Users\Chandana Reddy\Desktop\Spurthi\SAS\HW3-652258189.pdf", printer "PDF".
+8    %let SYSUSERI = Spurthi Bollina;
+9
+10   title "&SYSUSERI. - &UID. - Final Exericse" ;
+11
+12
+13
+14   /***************************************************************************************/
+15   /***************************************************************************************/
+16   /***************************** Macrotize Long Strings **********************************/
+17   /***************************************************************************************/
+18   /***************************************************************************************/
+19
+20   %let droprenamemv = (drop = CRSDepTime DepTime CRSArrTime ArrTime FirstDepTime WheelsOff
+20 ! WheelsOn Div1WheelsOn Div1WheelsOff Div2WheelsOn
+21   Div2WheelsOff Div3WheelsOn Div3WheelsOff Div4WheelsOn Div4WheelsOff Div5WheelsOn
+21 ! Div5WheelsOff
+22   rename =(CRSDepTimeF=CRSDepTime DepTimeF=DepTime CRSArrTimeF=CRSArrTime ArrTimeF=ArrTime
+22 ! FirstDepTimeF=FirstDepTime
+23   WheelsOffF=WheelsOff WheelsOnF=WheelsOn Div1WheelsOnF=Div1WheelsOn
+23 ! Div1WheelsOffF=Div1WheelsOff Div2WheelsOnF=Div2WheelsOn
+24   Div2WheelsOffF=Div2WheelsOff Div3WheelsOnF=Div3WheelsOn Div3WheelsOffF=Div3WheelsOff
+24 ! Div4WheelsOnF=Div4WheelsOn
+25   Div4WheelsOffF=Div4WheelsOff Div5WheelsOnF=Div5WheelsOn Div5WheelsOffF=Div5WheelsOff) ) ;
+26
+27   %let lengthmv = length Year 4. Quarter 4. Month 4. DayofMonth 4. DayOfWeek 4. FlightDate 8.
+27 ! UniqueCarrier $8. AirlineID  $4.
+28   Carrier  $4. TailNum  $10. FlightNum  $4. OriginAirportID  $8. OriginAirportSeqID  $8.
+28 ! OriginCityMarketID  $6. Origin  $32.
+29   OriginCityName  $32. OriginState  $32. OriginStateFips  $32. OriginStateName  $32. OriginWac
+29 !  $32. DestAirportID  $6.
+30   DestAirportSeqID  $6. DestCityMarketID  $6. Dest  $32. DestCityName  $32. DestState  $32.
+30 ! DestStateFips  $32.
+31   DestStateName  $32. DestWac  $32. CRSDepTime  $8. CRSDepTimeF 8. DepTime  $8. DepTimeF  8.
+31 ! DepDelay 4. DepDelayMinutes 4.
+32   DepDel15 4. DepartureDelayGroups 4. DepTimeBlk  $9. TaxiOut 4. WheelsOff  $8. WheelsOffF  8.
+32 ! WheelsOn  $8. WheelsOnF  8.
+33   TaxiIn 4. CRSArrTime  $8. CRSArrTimeF  8. ArrTime  $8. ArrTimeF  8. ArrDelay 4.
+33 ! ArrDelayMinutes 4. ArrDel15 4.
+34   ArrivalDelayGroups  4. ArrTimeBlk  $9. Cancelled 4. CancellationCode  $8. Diverted  4.
+34 ! CRSElapsedTime 4. ActualElapsedTime 4.
+35   AirTime 4. Flights 4. Distance 4. DistanceGroup 4. CarrierDelay 4. WeatherDelay 4. NASDelay
+35 ! 4. SecurityDelay 4. LateAircraftDelay 4.
+36   FirstDepTime  $8. FirstDepTimeF  8. TotalAddGTime 4. LongestAddGTime 4. DivAirportLandings 4.
+36 !  DivReachedDest 4. DivActualElapsedTime 4. DivArrDelay 4.
+37   DivDistance 4. Div1Airport  $8. Div1AirportID  $8. Div1AirportSeqID  $8. Div1WheelsOn  $8.
+37 ! Div1WheelsOnF  8. Div1TotalGTime 4. Div1LongestGTime 4.
+38   Div1WheelsOff  $8. Div1WheelsOffF  8. Div1TailNum  $8. Div2Airport  $8. Div2AirportID  $8.
+38 ! Div2AirportSeqID  $8. Div2WheelsOn  $8. Div2WheelsOnF  8. Div2TotalGTime 4.
+39   Div2LongestGTime 4. Div2WheelsOff  $8. Div2WheelsOffF  8. Div2TailNum  $8. Div3Airport  $8.
+39 ! Div3AirportID  $8. Div3AirportSeqID  $8. Div3WheelsOn  $8. Div3WheelsOnF  8.
+40   Div3TotalGTime 4. Div3LongestGTime 4. Div3WheelsOff  $8. Div3WheelsOffF  8. Div3TailNum  $8.
+40 ! Div4Airport  $8. Div4AirportID  $8. Div4AirportSeqID  $8.
+41   Div4WheelsOn  $8. Div4WheelsOnF  8. Div4TotalGTime 4. Div4LongestGTime 4. Div4WheelsOff  $8.
+41 ! Div4WheelsOffF  8. Div4TailNum  $8. Div5Airport  $8. Div5AirportID  $8.
+42   Div5AirportSeqID  $8. Div5WheelsOn  $8. Div5WheelsOnF  8. Div5TotalGTime 4. Div5LongestGTime
+42 ! 4. Div5WheelsOff  $8. Div5WheelsOffF  8. Div5TailNum   $8.  ;
+43
+44   %let inputmv = input Year Quarter Month DayofMonth DayOfWeek FlightDate :yymmdd10.
+44 ! UniqueCarrier $ AirlineID $ Carrier $ TailNum $ FlightNum $
+45   OriginAirportID $ OriginAirportSeqID $ OriginCityMarketID $ Origin $ OriginCityName $
+45 ! OriginState $ OriginStateFips $
+46   OriginStateName $ OriginWac $ DestAirportID $ DestAirportSeqID $ DestCityMarketID $ Dest $
+46 ! DestCityName $ DestState $
+47   DestStateFips $ DestStateName $ DestWac $ CRSDepTime $ DepTime $ DepDelay DepDelayMinutes
+47 ! DepDel15 DepartureDelayGroups
+48   DepTimeBlk $ TaxiOut WheelsOff $ WheelsOn $ TaxiIn CRSArrTime $ ArrTime $ ArrDelay
+48 ! ArrDelayMinutes ArrDel15 ArrivalDelayGroups
+49   ArrTimeBlk $ Cancelled CancellationCode $ Diverted CRSElapsedTime ActualElapsedTime AirTime
+49 ! Flights Distance DistanceGroup
+50   CarrierDelay WeatherDelay NASDelay SecurityDelay LateAircraftDelay FirstDepTime $
+50 ! TotalAddGTime LongestAddGTime
+51   DivAirportLandings DivReachedDest DivActualElapsedTime DivArrDelay DivDistance Div1Airport $
+51 ! Div1AirportID $ Div1AirportSeqID $
+52   Div1WheelsOn $ Div1TotalGTime Div1LongestGTime Div1WheelsOff $ Div1TailNum $ Div2Airport $
+52 ! Div2AirportID $ Div2AirportSeqID $
+53   Div2WheelsOn $ Div2TotalGTime Div2LongestGTime Div2WheelsOff $ Div2TailNum $ Div3Airport $
+53 ! Div3AirportID $ Div3AirportSeqID $
+54   Div3WheelsOn $ Div3TotalGTime Div3LongestGTime Div3WheelsOff $ Div3TailNum $ Div4Airport $
+54 ! Div4AirportID $ Div4AirportSeqID $
+55   Div4WheelsOn $ Div4TotalGTime Div4LongestGTime Div4WheelsOff $ Div4TailNum $ Div5Airport $
+55 ! Div5AirportID $ Div5AirportSeqID $
+56   Div5WheelsOn $ Div5TotalGTime Div5LongestGTime Div5WheelsOff $ Div5TailNum  $ ;
+57
+58   %macro timevars ;
+59   if CRSDepTime="2400" then do ;
+60       CRSDepTimeF=input("23:59", time5.) ; end ;
+61           else do ;
+62               format CRSDepTimeF time5. ;
+63               CRSDepTimeF=input(substr(CRSDepTime,1,2)||":"||substr(CRSDepTime,3,2), time5.) ;
+63 ! end ;
+64   if DepTime="2400" then do ;
+65       DepTimeF=input("23:59", time5.) ; end ;
+66           else do ;
+67               format DepTimeF time5. ;
+68               DepTimeF=input(substr(DepTime,1,2)||":"||substr(DepTime,3,2), time5.) ; end ;
+69   if CRSArrTime="2400" then do ;
+70       CRSArrTimeF=input("23:59", time5.) ; end ;
+71           else do ;
+72               format CRSArrTimeF time5. ;
+73               CRSArrTimeF=input(substr(CRSArrTime,1,2)||":"||substr(CRSArrTime,3,2), time5.) ;
+73 ! end ;
+74   if ArrTime="2400" then do ;
+75       ArrTimeF=input("23:59", time5.) ; end ;
+76           else do ;
+77               format ArrTimeF time5. ;
+78               ArrTimeF=input(substr(ArrTime,1,2)||":"||substr(ArrTime,3,2), time5.) ; end ;
+79   if FirstDepTime="2400" then do ;
+80       FirstDepTimeF=input("23:59", time5.) ; end ;
+81           else do ;
+82               format FirstDepTimeF time5. ;
+83               FirstDepTimeF=input(substr(FirstDepTime,1,2)||":"||substr(FirstDepTime,3,2),
+83 ! time5.) ; end ;
+84   if WheelsOff="2400" then do ;
+85       WheelsOffF=input("23:59", time5.) ; end ;
+86           else do ;
+87               format WheelsOffF time5. ;
+88               WheelsOffF=input(substr(WheelsOff,1,2)||":"||substr(WheelsOff,3,2), time5.) ; end
+88 !  ;
+89   if WheelsOn="2400" then do ;
+90       WheelsOnF=input("23:59", time5.) ; end ;
+91           else do ;
+92               format WheelsOnF time5. ;
+93               WheelsOnF=input(substr(WheelsOn,1,2)||":"||substr(WheelsOn,3,2), time5.) ; end ;
+94   if Div1WheelsOn="2400" then do ;
+95       Div1WheelsOnF=input("23:59", time5.) ; end ;
+96           else do ;
+97               format Div1WheelsOnF time5. ;
+98               Div1WheelsOnF=input(substr(Div1WheelsOn,1,2)||":"||substr(Div1WheelsOn,3,2),
+98 ! time5.) ; end ;
+99   if Div1WheelsOff="2400" then do ;
+100      Div1WheelsOffF=input("23:59", time5.) ; end ;
+101          else do ;
+102              format Div1WheelsOffF time5. ;
+103              Div1WheelsOffF=input(substr(Div1WheelsOff,1,2)||":"||substr(Div1WheelsOff,3,2),
+103! time5.) ; end ;
+104  if Div2WheelsOn="2400" then do ;
+105      Div2WheelsOnF=input("23:59", time5.) ; end ;
+106          else do ;
+107              format Div2WheelsOnF time5. ;
+108              Div2WheelsOnF=input(substr(Div2WheelsOn,1,2)||":"||substr(Div2WheelsOn,3,2),
+108! time5.) ; end ;
+109  if Div2WheelsOff="2400" then do ;
+110      Div2WheelsOffF=input("23:59", time5.) ; end ;
+111          else do ;
+112              format Div2WheelsOffF time5. ;
+113              Div2WheelsOffF=input(substr(Div2WheelsOff,1,2)||":"||substr(Div2WheelsOff,3,2),
+113! time5.) ; end ;
+114  if Div3WheelsOn="2400" then do ;
+115      Div3WheelsOnF=input("23:59", time5.) ; end ;
+116          else do ;
+117              format Div3WheelsOnF time5. ;
+118              Div3WheelsOnF=input(substr(Div3WheelsOn,1,2)||":"||substr(Div3WheelsOn,3,2),
+118! time5.) ; end ;
+119  if Div3WheelsOff="2400" then do ;
+120      Div3WheelsOffF=input("23:59", time5.) ; end ;
+121          else do ;
+122              format Div3WheelsOffF time5. ;
+123              Div3WheelsOffF=input(substr(Div3WheelsOff,1,2)||":"||substr(Div3WheelsOff,3,2),
+123! time5.) ; end ;
+124  if Div4WheelsOn="2400" then do ;
+125      Div4WheelsOnF=input("23:59", time5.) ; end ;
+126          else do ;
+127              format Div4WheelsOnF time5. ;
+128              Div4WheelsOnF=input(substr(Div4WheelsOn,1,2)||":"||substr(Div4WheelsOn,3,2),
+128! time5.) ; end ;
+129  if Div4WheelsOff="2400" then do ;
+130      Div4WheelsOffF=input("23:59", time5.) ; end ;
+131          else do ;
+132              format Div4WheelsOffF time5. ;
+133              Div4WheelsOffF=input(substr(Div4WheelsOff,1,2)||":"||substr(Div4WheelsOff,3,2),
+133! time5.) ; end ;
+134  if Div5WheelsOn="2400" then do ;
+135      Div5WheelsOnF=input("23:59", time5.) ; end ;
+136          else do ;
+137              format Div5WheelsOnF time5. ;
+138              Div5WheelsOnF=input(substr(Div5WheelsOn,1,2)||":"||substr(Div5WheelsOn,3,2),
+138! time5.) ; end ;
+139  if Div5WheelsOff="2400" then do ;
+140      Div5WheelsOffF=input("23:59", time5.) ; end ;
+141          else do ;
+142              format Div5WheelsOffF time5. ;
+143              Div5WheelsOffF=input(substr(Div5WheelsOff,1,2)||":"||substr(Div5WheelsOff,3,2),
+143! time5.) ; end ;
+144  %mend ;
+145
+146
+147  /***************************************************************************************/
+148  /***************************************************************************************/
+149  /**************** Reference Multiple Files in a SAS Dataset Manifest *******************/
+150  /***************************************************************************************/
+151  /***************************************************************************************/
+152  /*
+153  data manifest ;
+154  infile datalines firstobs=1 ;
+155  length fil2read $155;
+156  input fil2read $155.;
+157  datalines;
+158  C:\Users\Chandana Reddy\Desktop\SAS HW3\On_Time_On_Time_Performance_2015_5.csv
+159  ;
+160  */
+161  data HW3.BTS201505 &droprenamemv. ;
+162  infile 'C:\Users\Chandana Reddy\Desktop\Spurthi\SAS\On_Time_On_Time_Performance_2015_5.csv'
+163  dsd delimiter=',' firstobs=2 obs=max ;
+164
+165      &lengthmv. ;
+166
+167  do while(not done);
+168      &inputmv. ;
+169      %timevars ;
+170          output ;
+171  end;
+172  run ;
+
+NOTE: Variable done is uninitialized.
+NOTE: The infile 'C:\Users\Chandana
+      Reddy\Desktop\Spurthi\SAS\On_Time_On_Time_Performance_2015_5.csv' is:
+      Filename=C:\Users\Chandana Reddy\Desktop\Spurthi\SAS\On_Time_On_Time_Performance_2015_5.csv,
+      RECFM=V,LRECL=32767,
+      File Size (bytes)=224003544,
+      Last Modified=25Feb2017:13:55:43,
+      Create Time=25Feb2017:13:56:02
+
+NOTE: Invalid argument to function INPUT at line 7 column 70.
+NOTE: Invalid argument to function INPUT at line 11 column 28.
+NOTE: Invalid argument to function INPUT at line 13 column 29.
+NOTE: Invalid argument to function INPUT at line 14 column 28.
+NOTE: Invalid argument to function INPUT at line 15 column 29.
+NOTE: Invalid argument to function INPUT at line 17 column 28.
+NOTE: Invalid argument to function INPUT at line 18 column 29.
+NOTE: Invalid argument to function INPUT at line 19 column 28.
+NOTE: Invalid argument to function INPUT at line 21 column 29.
+NOTE: Invalid argument to function INPUT at line 22 column 28.
+NOTE: Invalid argument to function INPUT at line 23 column 29.
+NOTE: Invalid argument to function INPUT at line 7 column 70.
+NOTE: Invalid argument to function INPUT at line 11 column 28.
+NOTE: Invalid argument to function INPUT at line 13 column 29.
+NOTE: Invalid argument to function INPUT at line 14 column 28.
+NOTE: Invalid argument to function INPUT at line 15 column 29.
+NOTE: Invalid argument to function INPUT at line 17 column 28.
+NOTE: Invalid argument to function INPUT at line 18 column 29.
+NOTE: Invalid argument to function INPUT at line 19 column 28.
+NOTE: Invalid argument to function INPUT at line 21 column 29.
+NOTE: Invalid argument to function INPUT at line 22 column 28.
+NOTE: Invalid argument to function INPUT at line 23 column 29.
+NOTE: Invalid argument to function INPUT at line 7 column 70.
+NOTE: Invalid argument to function INPUT at line 11 column 28.
+NOTE: Invalid argument to function INPUT at line 13 column 29.
+NOTE: Invalid argument to function INPUT at line 14 column 28.
+NOTE: Invalid argument to function INPUT at line 15 column 29.
+NOTE: Invalid argument to function INPUT at line 17 column 28.
+NOTE: Invalid argument to function INPUT at line 18 column 29.
+NOTE: Invalid argument to function INPUT at line 19 column 28.
+NOTE: Invalid argument to function INPUT at line 21 column 29.
+NOTE: Invalid argument to function INPUT at line 22 column 28.
+NOTE: Invalid argument to function INPUT at line 23 column 29.
+NOTE: Invalid argument to function INPUT at line 7 column 70.
+NOTE: Invalid argument to function INPUT at line 11 column 28.
+NOTE: Invalid argument to function INPUT at line 13 column 29.
+NOTE: Invalid argument to function INPUT at line 14 column 28.
+NOTE: Invalid argument to function INPUT at line 15 column 29.
+NOTE: Invalid argument to function INPUT at line 17 column 28.
+NOTE: Invalid argument to function INPUT at line 18 column 29.
+NOTE: Invalid argument to function INPUT at line 19 column 28.
+NOTE: Invalid argument to function INPUT at line 21 column 29.
+NOTE: Invalid argument to function INPUT at line 22 column 28.
+NOTE: Invalid argument to function INPUT at line 23 column 29.
+NOTE: Invalid argument to function INPUT at line 7 column 70.
+NOTE: Invalid argument to function INPUT at line 11 column 28.
+NOTE: Invalid argument to function INPUT at line 13 column 29.
+NOTE: Invalid argument to function INPUT at line 14 column 28.
+NOTE: Invalid argument to function INPUT at line 15 column 29.
+NOTE: Invalid argument to function INPUT at line 17 column 28.
+NOTE: Invalid argument to function INPUT at line 18 column 29.
+NOTE: Invalid argument to function INPUT at line 19 column 28.
+NOTE: Invalid argument to function INPUT at line 21 column 29.
+NOTE: Invalid argument to function INPUT at line 22 column 28.
+NOTE: Invalid argument to function INPUT at line 23 column 29.
+NOTE: Invalid argument to function INPUT at line 7 column 70.
+NOTE: Invalid argument to function INPUT at line 11 column 28.
+NOTE: Invalid argument to function INPUT at line 13 column 29.
+NOTE: Invalid argument to function INPUT at line 14 column 28.
+NOTE: Invalid argument to function INPUT at line 15 column 29.
+NOTE: Invalid argument to function INPUT at line 17 column 28.
+NOTE: Invalid argument to function INPUT at line 18 column 29.
+NOTE: Invalid argument to function INPUT at line 19 column 28.
+NOTE: Invalid argument to function INPUT at line 21 column 29.
+NOTE: Invalid argument to function INPUT at line 22 column 28.
+NOTE: Invalid argument to function INPUT at line 23 column 29.
+NOTE: Invalid argument to function INPUT at line 7 column 70.
+NOTE: Invalid argument to function INPUT at line 11 column 28.
+NOTE: Invalid argument to function INPUT at line 13 column 29.
+NOTE: Invalid argument to function INPUT at line 14 column 28.
+NOTE: Invalid argument to function INPUT at line 15 column 29.
+NOTE: Invalid argument to function INPUT at line 17 column 28.
+NOTE: Invalid argument to function INPUT at line 18 column 29.
+NOTE: Invalid argument to function INPUT at line 19 column 28.
+NOTE: Invalid argument to function INPUT at line 21 column 29.
+NOTE: Invalid argument to function INPUT at line 22 column 28.
+NOTE: Invalid argument to function INPUT at line 23 column 29.
+NOTE: Invalid argument to function INPUT at line 7 column 70.
+NOTE: Invalid argument to function INPUT at line 11 column 28.
+NOTE: Invalid argument to function INPUT at line 13 column 29.
+NOTE: Invalid argument to function INPUT at line 14 column 28.
+NOTE: Invalid argument to function INPUT at line 15 column 29.
+NOTE: Invalid argument to function INPUT at line 17 column 28.
+NOTE: Invalid argument to function INPUT at line 18 column 29.
+NOTE: Invalid argument to function INPUT at line 19 column 28.
+NOTE: Invalid argument to function INPUT at line 21 column 29.
+NOTE: Invalid argument to function INPUT at line 22 column 28.
+NOTE: Invalid argument to function INPUT at line 23 column 29.
+NOTE: Invalid argument to function INPUT at line 7 column 70.
+NOTE: Invalid argument to function INPUT at line 11 column 28.
+NOTE: Invalid argument to function INPUT at line 13 column 29.
+NOTE: Invalid argument to function INPUT at line 14 column 28.
+NOTE: Invalid argument to function INPUT at line 15 column 29.
+NOTE: Invalid argument to function INPUT at line 17 column 28.
+NOTE: Invalid argument to function INPUT at line 18 column 29.
+NOTE: Invalid argument to function INPUT at line 19 column 28.
+NOTE: Invalid argument to function INPUT at line 21 column 29.
+NOTE: Invalid argument to function INPUT at line 22 column 28.
+NOTE: Invalid argument to function INPUT at line 23 column 29.
+NOTE: Invalid argument to function INPUT at line 7 column 70.
+NOTE: Over 100 NOTES, additional NOTES suppressed.
+NOTE: Invalid argument to function INPUT at line 11 column 28.
+NOTE: LOST CARD.
+Year=2015 Quarter=2 Month=5 DayofMonth=19 DayOfWeek=2 FlightDate=20227 UniqueCarrier=DL
+AirlineID=1979 Carrier=DL TailNum=N669DN FlightNum=776 OriginAirportID=10397
+OriginAirportSeqID=1039705 OriginCityMarketID=30397 Origin=ATL OriginCityName=Atlanta, GA
+OriginState=GA OriginStateFips=13 OriginStateName=Georgia OriginWac=34 DestAirportID=14986
+DestAirportSeqID=149860 DestCityMarketID=34986 Dest=SRQ DestCityName=Sarasota/Bradenton, FL
+DestState=FL DestStateFips=12 DestStateName=Florida DestWac=33 CRSDepTime=2208 CRSDepTimeF=22:08
+DepTime=2310 DepTimeF=23:10 DepDelay=62 DepDelayMinutes=62 DepDel15=1 DepartureDelayGroups=4
+DepTimeBlk=2200-2259 TaxiOut=12 WheelsOff=2322 WheelsOffF=23:22 WheelsOn=0028 WheelsOnF=0:28
+TaxiIn=4 CRSArrTime=2338 CRSArrTimeF=23:38 ArrTime=0032 ArrTimeF=0:32 ArrDelay=54
+ArrDelayMinutes=54 ArrDel15=1 ArrivalDelayGroups=3 ArrTimeBlk=2300-2359 Cancelled=0
+CancellationCode=  Diverted=0 CRSElapsedTime=90 ActualElapsedTime=82 AirTime=66 Flights=1
+Distance=444 DistanceGroup=2 CarrierDelay=54 WeatherDelay=0 NASDelay=0 SecurityDelay=0
+LateAircraftDelay=0 FirstDepTime=  FirstDepTimeF=. TotalAddGTime=. LongestAddGTime=.
+DivAirportLandings=0 DivReachedDest=. DivActualElapsedTime=. DivArrDelay=. DivDistance=.
+Div1Airport=  Div1AirportID=  Div1AirportSeqID=  Div1WheelsOn=  Div1WheelsOnF=. Div1TotalGTime=.
+Div1LongestGTime=. Div1WheelsOff=  Div1WheelsOffF=. Div1TailNum=  Div2Airport=  Div2AirportID=
+Div2AirportSeqID=  Div2WheelsOn=  Div2WheelsOnF=. Div2TotalGTime=. Div2LongestGTime=.
+Div2WheelsOff=  Div2WheelsOffF=. Div2TailNum=  Div3Airport=  Div3AirportID=  Div3AirportSeqID=
+Div3WheelsOn=  Div3WheelsOnF=. Div3TotalGTime=. Div3LongestGTime=. Div3WheelsOff=
+Div3WheelsOffF=. Div3TailNum=  Div4Airport=  Div4AirportID=  Div4AirportSeqID=  Div4WheelsOn=
+Div4WheelsOnF=. Div4TotalGTime=. Div4LongestGTime=. Div4WheelsOff=  Div4WheelsOffF=. Div4TailNum=
+Div5Airport=  Div5AirportID=  Div5AirportSeqID=  Div5WheelsOn=  Div5WheelsOnF=. Div5TotalGTime=.
+Div5LongestGTime=. Div5WheelsOff=  Div5WheelsOffF=. Div5TailNum=  done=. _ERROR_=1 _N_=1
+NOTE: 496993 records were read from the infile 'C:\Users\Chandana
+      Reddy\Desktop\Spurthi\SAS\On_Time_On_Time_Performance_2015_5.csv'.
+      The minimum record length was 361.
+      The maximum record length was 541.
+NOTE: Mathematical operations could not be performed at the following places. The results of the
+      operations have been set to missing values.
+      Each place is given by: (Number of times) at (Line):(Column).
+      5336 at 3:132     5920 at 6:78      493751 at 7:70    5636 at 9:64      5920 at 10:43
+      495277 at 11:28   495550 at 13:29   496978 at 14:28   496989 at 15:29   496993 at 17:28
+      496993 at 18:29   496993 at 19:28   496993 at 21:29   496993 at 22:28   496993 at 23:29
+NOTE: The data set HW3.BTS201505 has 496993 observations and 110 variables.
+NOTE: DATA statement used (Total process time):
+      real time           6.70 seconds
+      cpu time            5.93 seconds
+
+
+173
+174
+175  /*****************************************************************************/
+176  /*****************************************************************************/
+177  /***** Use PROC SQL to Generate a random subset of the BTS file **************/
+178  /*****************************************************************************/
+179  /*****************************************************************************/
+180  proc sql ;
+181  * <Randomly subset monthly file here.> ;
+182  create table HW3.BTS201505_subids as
+183  select carrier , tailnum , flightdate , count(*) as NN , ranuni(&UID.) as random
+184  from HW3.BTS201505
+185  group by carrier , tailnum , flightdate
+186  having random>.2 ;
+NOTE: Table HW3.BTS201505_SUBIDS created, with 92516 rows and 5 columns.
+
+187
+188  create table HW3.BTS201505_&uid. as
+189  select a.*
+190  from HW3.BTS201505 a inner join HW3.BTS201505_subids b
+191      on a.carrier=b.carrier and  a.flightdate=b.flightdate and a.tailnum=b.tailnum ;
+NOTE: Table HW3.BTS201505_652258189 created, with 396818 rows and 110 columns.
+
+192
+193  drop table HW3.BTS201505_subids ;
+NOTE: Table HW3.BTS201505_SUBIDS has been dropped.
+194
+195  quit ;
+NOTE: PROCEDURE SQL used (Total process time):
+      real time           4.84 seconds
+      cpu time            2.03 seconds
+
+
+196
+197
+198  /********* Replace MNAR Missing Values by Rule **************/
+199  proc stdize data=HW3.BTS201505_&uid. reponly missing=0 out=HW3.BTS201505_&uid. ;
+200  var DepDelay ArrDelay Distance ;
+201  run ;
+
+NOTE: There were 396818 observations read from the data set HW3.BTS201505_652258189.
+NOTE: The data set HW3.BTS201505_652258189 has 396818 observations and 110 variables.
+NOTE: PROCEDURE STDIZE used (Total process time):
+      real time           2.95 seconds
+      cpu time            1.10 seconds
+
+
+202
+203  /********* END / Replace MNAR Missing Values by Rule **************/
+204
+205
+206
+207
+208  /********* Create Lag Variables:
+209      ArrDelayLag ArrDelayLagInd ArrDelayLagCum DepDelayLag CancelledLag DistanceLag
+209! ArrDelayLag2 DepDelayLag2
+210  **************/
+211
+212  proc sort data=HW3.BTS201505_&uid.;
+213  by Carrier TailNum FlightDate CRSDepTime FlightNum ;
+214  run ;
+
+NOTE: There were 396818 observations read from the data set HW3.BTS201505_652258189.
+NOTE: The data set HW3.BTS201505_652258189 has 396818 observations and 110 variables.
+NOTE: PROCEDURE SORT used (Total process time):
+      real time           2.54 seconds
+      cpu time            1.70 seconds
+
+
+215
+216  data HW3.BTS201505_&uid.;
+217  retain DepDelayLag DepDelayLagCum 0 ArrDelayLag ArrDelayLagCum 0 CancelledLag 0 DistanceLag 0
+217!  Distance Carrier TailNum FlightDate DepDelay ArrDelay Cancelled;
+218  format flightdate yymmdd10. SeqNum DepDelayLag DepDelayLagInd DepDelayLagCum ArrDelayLagInd
+218! ArrDelayLag ArrDelayLagCum 4. ;
+219  set HW3.BTS201505_&uid. ;
+220  by Carrier TailNum FlightDate ;
+221  if first.FlightDate=1 then do ;
+222      DepDelayLag=0 ;
+223      DepDelayLagInd=0 ;
+224      DepDelayLagCum=0 ;
+225
+226      ArrDelayLag=0 ;
+227      ArrDelayLagInd=0 ;
+228      ArrDelayLagCum=0 ;
+229
+230      DistanceLag=0 ;
+231      DistanceLagCum=0 ;
+232      CancelledLag=0 ;
+233      SeqNum=1 ;
+234  end ;
+235  else do ;
+236      SeqNum+1 ;
+237      DistanceLagCum+DistanceLag ;
+238      DepDelayLagInd=(DepDelayLag^=0) ;
+239      DepDelayLagCum+DepDelayLag ;
+240      ArrDelayLagInd=(ArrDelayLag^=0) ;
+241      ArrDelayLagCum+ArrDelayLag ;
+242  end ;
+243  output ;
+244  DepDelayLag=DepDelay ;
+245  ArrDelayLag=ArrDelay ;
+246  DistanceLag=Distance ;
+247  CancelledLag=Cancelled ;
+248  run ;
+
+NOTE: There were 396818 observations read from the data set HW3.BTS201505_652258189.
+NOTE: The data set HW3.BTS201505_652258189 has 396818 observations and 120 variables.
+NOTE: DATA statement used (Total process time):
+      real time           2.97 seconds
+      cpu time            1.15 seconds
+
+
+249
+250
+251  data HW3.BTS201505_&uid. ;
+252  retain DepDelayLag2 0 DepDelayLagCum2 0 ArrDelayLag2 ArrDelayLagCum2 0 DepDelayLag
+252! DepDelayLagCum ArrDelayLag ArrDelayLagCum  DepDelayLagInd2 ArrDelayLagInd2 SeqNum DepDelay
+252! ArrDelay Carrier TailNum FlightDate ;
+253  format flightdate yymmdd10. DepDelayLagInd2 DepDelayLag2 DepDelayLagCum2 ArrDelayLagInd2
+253! ArrDelayLag2 ArrDelayLagCum2 4.;
+254  set HW3.BTS201505_&uid. ;
+255  by Carrier TailNum FlightDate ;
+256  if SeqNum<=2 then do ;
+257      DepDelayLag2=0 ;
+258      DepDelayLagInd2=0 ;
+259      DepDelayLagCum2=0 ;
+260
+261      ArrDelayLag2=0 ;
+262      ArrDelayLagInd2=0 ;
+263      ArrDelayLagCum2=0 ;
+264
+265  end ;
+266  else do ;
+267      DepDelayLagInd2=(DepDelayLag2^=0) ;
+268      DepDelayLagCum2+DepDelayLag2 ;
+269      ArrDelayLagInd2=(ArrDelayLag2^=0) ;
+270      ArrDelayLagCum2+ArrDelayLag2 ;
+271  end ;
+272  output ;
+273  DepDelayLag2=Lag(DepDelay) ;
+274  ArrDelayLag2=Lag(ArrDelay) ;
+275  run ;
+
+NOTE: There were 396818 observations read from the data set HW3.BTS201505_652258189.
+NOTE: The data set HW3.BTS201505_652258189 has 396818 observations and 126 variables.
+NOTE: DATA statement used (Total process time):
+      real time           2.64 seconds
+      cpu time            1.21 seconds
+
+
+276
+277
+278  /********* END / Create Lag Variables ***********************/
+279
+280
+281
+282
+283
+284
+285
+286  /********* Generate OLS estimates of model:
+287  DepDelay = Carrier CRSDepTime seqnum ArrDelayLagInd ArrDelayLag ArrDelayLagCum DepDelayLag2
+287! ArrDelayLag2 CancelledLag DistanceLag
+288  **************/
+289
+290  proc GLM data=HW3.BTS201505_&uid.  ; *descending ;
+291  class carrier;
+292  model DepDelay= Carrier CRSDepTime seqnum ArrDelayLagInd ArrDelayLag ArrDelayLagCum
+292! DepDelayLag2 ArrDelayLag2 CancelledLag DistanceLag;
+293  *by carrier;
+294  run ;
+
+NOTE: Writing HTML Body file: sashtml1.htm
+295  quit ;
+
+NOTE: PROCEDURE GLM used (Total process time):
+      real time           1.16 seconds
+      cpu time            1.03 seconds
+
+
+296
+297  /********* END / Generate OLS estimates of OLS model **************/
+298
+299
+300
+301
+302
+303
+304
+305  /********* Create CARRIER/TAILNUM/FLIGHTDATE summary data set **************/
+306
+307  data HW3.BTS201505_&uid._DEL15S;
+308  retain MaxCRSDepTime CRSDepTime Carrier TailNum FlightDate ;
+309  format MaxCRSDepTime time5.;
+310  set HW3.BTS201505_&uid. ;
+311  by Carrier TailNum FlightDate ;
+312
+313  if first.FlightDate=1 then do ;
+314      DelayCount=(DepDel15=1) ;
+315      lnSeqNUM = log(SeqNum) ;
+316      MaxCRSDepTime = CRSDepTime;
+317      DistanceCum=Distance ;
+318      CancelledCount=(Cancelled=1) ;
+319  end ;
+320  else do ;
+321      DelayCount+(DepDel15=1) ;
+322      lnSeqNUM = log(SeqNum) ;
+323      MaxCRSDepTime = CRSDepTime;
+324      DistanceCum+Distance ;
+325      CancelledCount+(Cancelled=1) ;
+326  end ;
+327  /*
+328  if last.FlightDate=1 then do ;
+329      output ;
+330  end ;
+331  */
+332  run ;
+
+NOTE: There were 396818 observations read from the data set HW3.BTS201505_652258189.
+NOTE: The data set HW3.BTS201505_652258189_DEL15S has 396818 observations and 131 variables.
+NOTE: DATA statement used (Total process time):
+      real time           1.97 seconds
+      cpu time            0.82 seconds
+
+
+333
+334
+335  /********* END / Create CARRIER/TAILNUM?FLIGHTDATE summary data set **************/
+336
+337
+338
+339
+340
+341  /********* Estimate POISSON model parameters for CARRIER/TAILNUM/FLIGHTDATE summary data set
+341! **************/
+342
+343  proc genmod data = HW3.BTS201505_&uid._DEL15S ;
+344  class Carrier /param=glm;
+345  model DelayCount= Carrier MaxCRSDepTime DistanceCum CancelledCount / type3 dist=poisson
+345! link=log offset = lnSeqNUM;
+346      output out=poisson1 pred=pred ;
+347  run ;
+
+NOTE: Algorithm converged.
+NOTE: The scale parameter was held fixed.
+NOTE: The data set WORK.POISSON1 has 396818 observations and 132 variables.
+NOTE: PROCEDURE GENMOD used (Total process time):
+      real time           7.18 seconds
+      cpu time            5.28 seconds
+
+
+348
+349  proc genmod data = HW3.BTS201505_&uid._DEL15S ;
+350  class Carrier /param=glm;
+351  model DelayCount= Carrier MaxCRSDepTime DistanceCum CancelledCount / type3 dist=poisson
+351! link=log offset = lnSeqNUM;
+352      output out=poisson2 pred=pred ;
+353  by carrier;
+354
+355  run ;
+
+NOTE: The CLASS variable Carrier has only one level: 'AA'.
+NOTE: Algorithm converged.
+NOTE: The scale parameter was held fixed.
+NOTE: The above message was for the following BY group:
+      Carrier=AA
+NOTE: The CLASS variable Carrier has only one level: 'AS'.
+NOTE: Algorithm converged.
+NOTE: The scale parameter was held fixed.
+NOTE: The above message was for the following BY group:
+      Carrier=AS
+NOTE: The CLASS variable Carrier has only one level: 'B6'.
+NOTE: Algorithm converged.
+NOTE: The scale parameter was held fixed.
+NOTE: The above message was for the following BY group:
+      Carrier=B6
+NOTE: The CLASS variable Carrier has only one level: 'DL'.
+NOTE: Algorithm converged.
+NOTE: The scale parameter was held fixed.
+NOTE: The above message was for the following BY group:
+      Carrier=DL
+NOTE: The CLASS variable Carrier has only one level: 'EV'.
+NOTE: Algorithm converged.
+NOTE: The scale parameter was held fixed.
+NOTE: The above message was for the following BY group:
+      Carrier=EV
+NOTE: The CLASS variable Carrier has only one level: 'F9'.
+NOTE: Algorithm converged.
+NOTE: The scale parameter was held fixed.
+NOTE: The above message was for the following BY group:
+      Carrier=F9
+NOTE: The CLASS variable Carrier has only one level: 'HA'.
+NOTE: Algorithm converged.
+NOTE: The scale parameter was held fixed.
+NOTE: The above message was for the following BY group:
+      Carrier=HA
+NOTE: The CLASS variable Carrier has only one level: 'MQ'.
+NOTE: Algorithm converged.
+NOTE: The scale parameter was held fixed.
+NOTE: The above message was for the following BY group:
+      Carrier=MQ
+NOTE: The CLASS variable Carrier has only one level: 'NK'.
+NOTE: Algorithm converged.
+NOTE: The scale parameter was held fixed.
+NOTE: The above message was for the following BY group:
+      Carrier=NK
+NOTE: The CLASS variable Carrier has only one level: 'OO'.
+NOTE: Algorithm converged.
+NOTE: The scale parameter was held fixed.
+NOTE: The above message was for the following BY group:
+      Carrier=OO
+NOTE: The CLASS variable Carrier has only one level: 'UA'.
+NOTE: Algorithm converged.
+NOTE: The scale parameter was held fixed.
+NOTE: The above message was for the following BY group:
+      Carrier=UA
+NOTE: The CLASS variable Carrier has only one level: 'US'.
+NOTE: Algorithm converged.
+NOTE: The scale parameter was held fixed.
+NOTE: The above message was for the following BY group:
+      Carrier=US
+NOTE: The CLASS variable Carrier has only one level: 'VX'.
+NOTE: Algorithm converged.
+NOTE: The scale parameter was held fixed.
+NOTE: The above message was for the following BY group:
+      Carrier=VX
+NOTE: The CLASS variable Carrier has only one level: 'WN'.
+NOTE: Algorithm converged.
+NOTE: The scale parameter was held fixed.
+NOTE: The above message was for the following BY group:
+      Carrier=WN
+NOTE: The data set WORK.POISSON2 has 396818 observations and 132 variables.
+NOTE: PROCEDURE GENMOD used (Total process time):
+      real time           5.26 seconds
+      cpu time            4.61 seconds
+
+
+356
+357  /********* END / Estimate POISSON model parameters for CARRIER/TAILNUM/FLIGHTDATE summary
+357! data set **************/
+358
+359
+360
+361
+362
+363
+364  /********* Fit model parameters using the LASSO feature selection method, use full
+364! HW3.BTS201505_&UID. dataset **************/
+365
+366  proc glmselect data=HW3.BTS201505_&UID ;
+367      partition fraction(TEST=.1 VALIDATE=.2) ;
+368  class origin carrier ;
+369  model DepDelay = origin CRSDepTime seqnum ArrDelayLagInd ArrDelayLag ArrDelayLagCum
+369! ArrDelayLag2 DepDelayLag2
+370  CancelledLag DistanceLag/ selection=LASSO(screen=sasvi ) ;
+371  score data=HW3.BTS201505_&UID out=glmscore P R ;
+372  output out=GLMOUT P R ;
+373  *where cancelled=0 ;
+374  run ;
+
+NOTE: All classification variables are split with LAR, LASSO and ELASTICNET selection.
+NOTE: Class levels for some variables were not printed due to excessive size.
+NOTE: There were 396818 observations read from the data set HW3.BTS201505_652258189.
+NOTE: The data set WORK.GLMSCORE has 396818 observations and 128 variables.
+NOTE: The data set WORK.GLMOUT has 396818 observations and 129 variables.
+NOTE: PROCEDURE GLMSELECT used (Total process time):
+      real time           12.63 seconds
+      cpu time            13.31 seconds
+
+
+375
+376  /********* END / Fit model parameters using the LASSO feature selection method
+376! **************/
+377
+378
+379
+380
+381
+382
+383  /********* Fit AVERAGE LASSO model parameters for samples from HW3.BTS201505_&UID. dataset
+383! **************/
+384  ods graphics on;
+385  proc glmselect data=HW3.BTS201505_&UID seed=3 plots=(EffectSelectPct ParmDistribution);
+386  class origin carrier ;
+387  model DepDelay=origin CRSDepTime seqnum ArrDelayLagInd ArrDelayLag ArrDelayLagCum
+387! ArrDelayLag2 DepDelayLag2
+388  CancelledLag DistanceLag/ selection=LASSO(adaptive stop=none choose=SBC);
+389  modelAverage tables=(EffectSelectPct(all) ParmEst(all)) nsamples=10 ;
+390  run;
+
+NOTE: All classification variables are split with LAR, LASSO and ELASTICNET selection.
+NOTE: Class levels for some variables were not printed due to excessive size.
+NOTE: There were 396818 observations read from the data set HW3.BTS201505_652258189.
+NOTE: PROCEDURE GLMSELECT used (Total process time):
+      real time           6:49.28
+      cpu time            21:08.37
+
+
+391  ods graphics off ;
+392
+393  /********* END / Fit AVERAGE LASSO model parameters for samples from HW3.BTS201505_&UID.
+393! dataset **************/
+394
+395
+396  ods pdf close ;
+NOTE: ODS PDF printed 68 pages to C:\Users\Chandana Reddy\Desktop\Spurthi\SAS\HW3-652258189.pdf.

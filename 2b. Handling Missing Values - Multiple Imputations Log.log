@@ -1,0 +1,1559 @@
+1    dm 'clear log';
+2
+3    Title "&SYSUSERID - HW2";
+4    %let libpath= E:\1. Ms Academics\3. Spring Courses\3. IDS 594 - SaS\Assign 2\sasdata\;
+5    libname HW2 "&libpath.";
+NOTE: Libref HW2 was successfully assigned as follows:
+      Engine:        V9
+      Physical Name: E:\1. Ms Academics\3. Spring Courses\3. IDS 594 - SaS\Assign 2\sasdata
+6    %let pdfpath = E:\1. Ms Academics\3. Spring Courses\3. IDS 594 - SaS\Assign 2\;
+7    ODS PDF FILE = "&pdfpath.\HW2_SpurthiBollina.pdf";
+NOTE: Writing ODS PDF output to DISK destination
+      "E:\1. Ms Academics\3. Spring Courses\3. IDS 594 - SaS\Assign 2\\HW2_SpurthiBollina.pdf", printer "PDF".
+8    ODS TRACE ON;
+9
+10   %let droprenamemv = (drop = CRSDepTime DepTime CRSArrTime ArrTime FirstDepTime WheelsOff WheelsOn Div1WheelsOn
+10 ! Div1WheelsOff Div2WheelsOn
+11   Div2WheelsOff Div3WheelsOn Div3WheelsOff Div4WheelsOn Div4WheelsOff Div5WheelsOn Div5WheelsOff
+12   rename =(CRSDepTimeF=CRSDepTime DepTimeF=DepTime CRSArrTimeF=CRSArrTime ArrTimeF=ArrTime FirstDepTimeF=FirstDepTime
+13   WheelsOffF=WheelsOff WheelsOnF=WheelsOn Div1WheelsOnF=Div1WheelsOn Div1WheelsOffF=Div1WheelsOff Div2WheelsOnF=Div2WheelsOn
+14   Div2WheelsOffF=Div2WheelsOff Div3WheelsOnF=Div3WheelsOn Div3WheelsOffF=Div3WheelsOff Div4WheelsOnF=Div4WheelsOn
+15   Div4WheelsOffF=Div4WheelsOff Div5WheelsOnF=Div5WheelsOn Div5WheelsOffF=Div5WheelsOff) ) ;
+16
+17   %let lengthmv = length Year 4. Quarter 4. Month 4. DayofMonth 4. DayOfWeek 4. FlightDate 8. UniqueCarrier $8. AirlineID
+17 ! $4.
+18   Carrier  $4. TailNum  $10. FlightNum  $4. OriginAirportID  $8. OriginAirportSeqID  $8. OriginCityMarketID  $6. Origin
+18 ! $32.
+19   OriginCityName  $32. OriginState  $32. OriginStateFips  $32. OriginStateName  $32. OriginWac  $32. DestAirportID  $6.
+20   DestAirportSeqID  $6. DestCityMarketID  $6. Dest  $32. DestCityName  $32. DestState  $32. DestStateFips  $32.
+21   DestStateName  $32. DestWac  $32. CRSDepTime  $8. CRSDepTimeF 8. DepTime  $8. DepTimeF  8. DepDelay 4. DepDelayMinutes 4.
+22   DepDel15 4. DepartureDelayGroups 4. DepTimeBlk  $9. TaxiOut 4. WheelsOff  $8. WheelsOffF  8. WheelsOn  $8. WheelsOnF  8.
+23   TaxiIn 4. CRSArrTime  $8. CRSArrTimeF  8. ArrTime  $8. ArrTimeF  8. ArrDelay 4. ArrDelayMinutes 4. ArrDel15 4.
+24   ArrivalDelayGroups  4. ArrTimeBlk  $9. Cancelled 4. CancellationCode  $8. Diverted  4. CRSElapsedTime 4. ActualElapsedTime
+24 !  4.
+25   AirTime 4. Flights 4. Distance 4. DistanceGroup 4. CarrierDelay 4. WeatherDelay 4. NASDelay 4. SecurityDelay 4.
+25 ! LateAircraftDelay 4.
+26   FirstDepTime  $8. FirstDepTimeF  8. TotalAddGTime 4. LongestAddGTime 4. DivAirportLandings 4. DivReachedDest 4.
+26 ! DivActualElapsedTime 4. DivArrDelay 4.
+27   DivDistance 4. Div1Airport  $8. Div1AirportID  $8. Div1AirportSeqID  $8. Div1WheelsOn  $8. Div1WheelsOnF  8.
+27 ! Div1TotalGTime 4. Div1LongestGTime 4.
+28   Div1WheelsOff  $8. Div1WheelsOffF  8. Div1TailNum  $8. Div2Airport  $8. Div2AirportID  $8. Div2AirportSeqID  $8.
+28 ! Div2WheelsOn  $8. Div2WheelsOnF  8. Div2TotalGTime 4.
+29   Div2LongestGTime 4. Div2WheelsOff  $8. Div2WheelsOffF  8. Div2TailNum  $8. Div3Airport  $8. Div3AirportID  $8.
+29 ! Div3AirportSeqID  $8. Div3WheelsOn  $8. Div3WheelsOnF  8.
+30   Div3TotalGTime 4. Div3LongestGTime 4. Div3WheelsOff  $8. Div3WheelsOffF  8. Div3TailNum  $8. Div4Airport  $8.
+30 ! Div4AirportID  $8. Div4AirportSeqID  $8.
+31   Div4WheelsOn  $8. Div4WheelsOnF  8. Div4TotalGTime 4. Div4LongestGTime 4. Div4WheelsOff  $8. Div4WheelsOffF  8.
+31 ! Div4TailNum  $8. Div5Airport  $8. Div5AirportID  $8.
+32   Div5AirportSeqID  $8. Div5WheelsOn  $8. Div5WheelsOnF  8. Div5TotalGTime 4. Div5LongestGTime 4. Div5WheelsOff  $8.
+32 ! Div5WheelsOffF  8. Div5TailNum   $8.  ;
+33
+34   %let inputmv = input Year Quarter Month DayofMonth DayOfWeek FlightDate :yymmdd10. UniqueCarrier $ AirlineID $ Carrier $
+34 ! TailNum $ FlightNum $
+35   OriginAirportID $ OriginAirportSeqID $ OriginCityMarketID $ Origin $ OriginCityName $ OriginState $ OriginStateFips $
+36   OriginStateName $ OriginWac $ DestAirportID $ DestAirportSeqID $ DestCityMarketID $ Dest $ DestCityName $ DestState $
+37   DestStateFips $ DestStateName $ DestWac $ CRSDepTime $ DepTime $ DepDelay DepDelayMinutes DepDel15 DepartureDelayGroups
+38   DepTimeBlk $ TaxiOut WheelsOff $ WheelsOn $ TaxiIn CRSArrTime $ ArrTime $ ArrDelay ArrDelayMinutes ArrDel15
+38 ! ArrivalDelayGroups
+39   ArrTimeBlk $ Cancelled CancellationCode $ Diverted CRSElapsedTime ActualElapsedTime AirTime Flights Distance DistanceGroup
+40   CarrierDelay WeatherDelay NASDelay SecurityDelay LateAircraftDelay FirstDepTime $ TotalAddGTime LongestAddGTime
+41   DivAirportLandings DivReachedDest DivActualElapsedTime DivArrDelay DivDistance Div1Airport $ Div1AirportID $
+41 ! Div1AirportSeqID $
+42   Div1WheelsOn $ Div1TotalGTime Div1LongestGTime Div1WheelsOff $ Div1TailNum $ Div2Airport $ Div2AirportID $
+42 ! Div2AirportSeqID $
+43   Div2WheelsOn $ Div2TotalGTime Div2LongestGTime Div2WheelsOff $ Div2TailNum $ Div3Airport $ Div3AirportID $
+43 ! Div3AirportSeqID $
+44   Div3WheelsOn $ Div3TotalGTime Div3LongestGTime Div3WheelsOff $ Div3TailNum $ Div4Airport $ Div4AirportID $
+44 ! Div4AirportSeqID $
+45   Div4WheelsOn $ Div4TotalGTime Div4LongestGTime Div4WheelsOff $ Div4TailNum $ Div5Airport $ Div5AirportID $
+45 ! Div5AirportSeqID $
+46   Div5WheelsOn $ Div5TotalGTime Div5LongestGTime Div5WheelsOff $ Div5TailNum  $ ;
+47
+48   %macro timevars ;
+49   if CRSDepTime="2400" then do ;
+50       CRSDepTimeF=input("23:59", time5.) ; end ;
+51           else do ;
+52               format CRSDepTimeF time5. ;
+53               CRSDepTimeF=input(substr(CRSDepTime,1,2)||":"||substr(CRSDepTime,3,2), time5.) ; end ;
+54
+55   %mend ;
+56
+57   data Hw2.dataread ;
+58   infile datalines firstobs=1 ;
+59   length fil2read $120;
+60   input fil2read $120.;
+61   datalines;
+
+NOTE: The data set HW2.DATAREAD has 1 observations and 1 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+
+
+63   ;
+64
+65
+66   data HW2.BTS201503 &droprenamemv. ;
+67   set HW2.dataread ;
+68   infile dummy filevar=fil2read end=done dsd delimiter=',' firstobs=2 obs=max ;
+69       &lengthmv. ;
+70   do while(not done);
+71       &inputmv. ;
+72       %timevars ;
+73   FlightNum_num=input(FlightNum, 4.) ;
+74   output;
+75   end;
+76   run ;
+
+NOTE: The variable fil2read exists on an input data set, but was also specified in an I/O statement option.  The variable will
+      not be included on any output data set.
+NOTE: Variable DepTimeF is uninitialized.
+NOTE: Variable WheelsOffF is uninitialized.
+NOTE: Variable WheelsOnF is uninitialized.
+NOTE: Variable CRSArrTimeF is uninitialized.
+NOTE: Variable ArrTimeF is uninitialized.
+NOTE: Variable FirstDepTimeF is uninitialized.
+NOTE: Variable Div1WheelsOnF is uninitialized.
+NOTE: Variable Div1WheelsOffF is uninitialized.
+NOTE: Variable Div2WheelsOnF is uninitialized.
+NOTE: Variable Div2WheelsOffF is uninitialized.
+NOTE: Variable Div3WheelsOnF is uninitialized.
+NOTE: Variable Div3WheelsOffF is uninitialized.
+NOTE: Variable Div4WheelsOnF is uninitialized.
+NOTE: Variable Div4WheelsOffF is uninitialized.
+NOTE: Variable Div5WheelsOnF is uninitialized.
+NOTE: Variable Div5WheelsOffF is uninitialized.
+NOTE: The infile DUMMY is:
+      Filename=E:\1. Ms Academics\3. Spring Courses\3. IDS 594 - SaS\Assign 2\On_Time_On_Time_Performance_2015_3.csv,
+      RECFM=V,LRECL=32767,
+      File Size (bytes)=227016932,
+      Last Modified=16Feb2017:23:17:56,
+      Create Time=16Feb2017:23:17:12
+
+NOTE: 504312 records were read from the infile DUMMY.
+      The minimum record length was 360.
+      The maximum record length was 519.
+NOTE: There were 1 observations read from the data set HW2.DATAREAD.
+NOTE: The data set HW2.BTS201503 has 504312 observations and 110 variables.
+NOTE: DATA statement used (Total process time):
+      real time           29.04 seconds
+      cpu time            4.01 seconds
+
+
+77
+78
+79
+80   proc sort data=HW2.BTS201503 ;
+81   by Carrier TailNum FlightDate CRSDepTime FlightNum ;
+82   run ;
+
+NOTE: There were 504312 observations read from the data set HW2.BTS201503.
+NOTE: The data set HW2.BTS201503 has 504312 observations and 110 variables.
+NOTE: PROCEDURE SORT used (Total process time):
+      real time           37.99 seconds
+      cpu time            1.62 seconds
+
+
+83
+84   /* One Period Lag*/
+85   data HW2.BTS_lag_delays_201503 ;
+86   retain DepDelayLag 0 DepDelayLagCum 0 ArrDelayLag ArrDelayLagCum 0 CancelledLag1 0 Carrier TailNum FlightDate DepDelay
+86 ! ArrDelay Cancelled;
+87   format flightdate yymmdd10. SeqNum DepDelayLagInd DepDelayLag DepDelayLagCum ArrDelayLagInd ArrDelayLag ArrDelayLagCum 4.
+87 ! ;
+88   set HW2.BTS201503 ;
+89   by Carrier TailNum FlightDate ;
+90   if first.FlightDate=1 then do ;
+91       DepDelayLag=0 ;
+92       DepDelayLagInd=0 ;
+93       DepDelayLagCum=0 ;
+94
+95       ArrDelayLag=0 ;
+96       ArrDelayLagInd=0 ;
+97       ArrDelayLagCum=0 ;
+98
+99       /*DistanceLag1=0 ;
+100      DistanceLagCum=0 ;*/
+101      CancelledLag1=0 ;
+102      SeqNum=1 ;
+103  end ;
+104  else do ;
+105      SeqNum+1 ;
+106      /*DistanceLagCum+DistanceLag1 ;*/
+107      DepDelayLagInd=(DepDelayLag^=0) ;
+108      DepDelayLagCum+DepDelayLag ;
+109      ArrDelayLagInd=(ArrDelayLag^=0) ;
+110      ArrDelayLagCum+ArrDelayLag ;
+111  end ;
+112  output ;
+113  DepDelayLag=DepDelay ;
+114  ArrDelayLag=ArrDelay ;
+115  /*DistanceLag1=Distance ; */
+116  CancelledLag1=Cancelled ;
+117  run ;
+
+NOTE: There were 504312 observations read from the data set HW2.BTS201503.
+NOTE: The data set HW2.BTS_LAG_DELAYS_201503 has 504312 observations and 118 variables.
+NOTE: DATA statement used (Total process time):
+      real time           36:54.91
+      cpu time            1.54 seconds
+
+
+118
+119
+120  proc stdize data=HW2.BTS_lag_delays_201503 reponly missing=0 out=HW2.BTS201503REP ;
+121  var DepDelayLagInd DepDelayLag DepDelayLagCum ArrDelayLagInd ArrDelayLag ArrDelayLagCum ;
+122  run ;
+
+NOTE: There were 504312 observations read from the data set HW2.BTS_LAG_DELAYS_201503.
+NOTE: The data set HW2.BTS201503REP has 504312 observations and 118 variables.
+NOTE: PROCEDURE STDIZE used (Total process time):
+      real time           43.01 seconds
+      cpu time            2.20 seconds
+
+
+123
+124  data HW2.BTS_201503;
+125  retain DepDelayClass DepartureDelayGroups ;
+126  format DepDelayClass 4.;
+127  set HW2.BTS201503REP;
+128  if DepartureDelayGroups <= 0 then do;
+129      DepDelayClass = 0;
+130  end;
+131  else if DepartureDelayGroups in (1,2,3) then do;
+132      DepDelayClass = 1;
+133  end;
+134  else if DepartureDelayGroups > 3 then do;
+135      DepDelayClass = 2;
+136  end;
+137  else do;
+138      DepDelayClass = DepartureDelayGroups;
+139  end;
+140  run;
+
+NOTE: There were 504312 observations read from the data set HW2.BTS201503REP.
+NOTE: The data set HW2.BTS_201503 has 504312 observations and 119 variables.
+NOTE: DATA statement used (Total process time):
+      real time           25.70 seconds
+      cpu time            1.31 seconds
+
+
+141
+142
+143  /* 2 Period Lags */
+144  data HW2.BTS_lag_delays2_201503 ;
+145  retain DepDelayLag2 0 DepDelayLagCum2 0 ArrDelayLag2 ArrDelayLagCum2 0 DepDelayLag DepDelayLagCum ArrDelayLag
+145! ArrDelayLagCum  DepDelayLagInd2 ArrDelayLagInd2 SeqNum DepDelay ArrDelay Carrier TailNum FlightDate ;
+146  format flightdate yymmdd10. DepDelayLagInd2 DepDelayLag2 DepDelayLagCum2 ArrDelayLagInd2 ArrDelayLag2 ArrDelayLagCum2 4.;
+147  set HW2.BTS_201503 ;
+148  by Carrier TailNum FlightDate ;
+149  if SeqNum<=2 then do ;
+150      DepDelayLag2=0 ;
+151      DepDelayLagInd2=0 ;
+152      DepDelayLagCum2=0 ;
+153
+154      ArrDelayLag2=0 ;
+155      ArrDelayLagInd2=0 ;
+156      ArrDelayLagCum2=0 ;
+157      CancelledLag2=0 ;
+158
+159  end ;
+160  else do ;
+161      DepDelayLagInd2=(DepDelayLag2^=0) ;
+162      DepDelayLagCum2+DepDelayLag2 ;
+163      ArrDelayLagInd2=(ArrDelayLag2^=0) ;
+164      ArrDelayLagCum2+ArrDelayLag2 ;
+165  end ;
+166  output ;
+167  DepDelayLag2=Lag(DepDelay) ;
+168  ArrDelayLag2=Lag(ArrDelay) ;
+169  run ;
+
+NOTE: There were 504312 observations read from the data set HW2.BTS_201503.
+NOTE: The data set HW2.BTS_LAG_DELAYS2_201503 has 504312 observations and 126 variables.
+NOTE: DATA statement used (Total process time):
+      real time           17.76 seconds
+      cpu time            2.45 seconds
+
+
+170
+171  *Handling missing values before logistic operation;
+172
+173  proc stdize data=HW2.BTS_lag_delays2_201503 reponly missing=0 out=HW2.BTS201503_Logistic ;
+174  var DepDelayLag2 ArrDelayLag2 CancelledLag1 CRSDepTime ArrDelayLagInd ArrDelayLag ArrDelayLagCum DepDelayClass;
+175  run ;
+
+NOTE: There were 504312 observations read from the data set HW2.BTS_LAG_DELAYS2_201503.
+NOTE: The data set HW2.BTS201503_LOGISTIC has 504312 observations and 126 variables.
+NOTE: PROCEDURE STDIZE used (Total process time):
+      real time           12.61 seconds
+      cpu time            2.23 seconds
+
+
+176
+177
+178  *2.a. Ensure that the reference level of the DV is its smallest value (0);
+179
+180  proc logistic data=HW2.BTS201503_Logistic ; *descending ;
+181  class DepDelayClass (ref= '0')/param = ref;
+182  model DepDelayClass =
+183  CRSDepTime
+184  seqnum
+185  ArrDelayLagInd
+186  ArrDelayLag
+187  ArrDelayLagCum
+188  DepDelayLag2
+189  ArrDelayLag2
+190  CancelledLag1/link =logit;
+191  where cancelled=0;
+192  *by carrier;
+193  run ;
+
+NOTE: Writing HTML Body file: sashtml.htm
+
+Output Added:
+-------------
+Name:       ModelInfo
+Label:      Model Information
+Template:   Stat.Logistic.ModelInfo
+Path:       Logistic.ModelInfo
+-------------
+
+Output Added:
+-------------
+Name:       NObs
+Label:      Observations Summary
+Template:   Stat.Logistic.NObs
+Path:       Logistic.NObs
+-------------
+
+Output Added:
+-------------
+Name:       ResponseProfile
+Label:      Response Profile
+Template:   Stat.Logistic.ResponseProfile
+Path:       Logistic.ResponseProfile
+-------------
+NOTE: The REF= option for the response variable is ignored.
+NOTE: PROC LOGISTIC is fitting the cumulative logit model. The probabilities modeled are summed over the responses having the
+      lower Ordered Values in the Response Profile table. Use the response variable option DESCENDING if you want to reverse
+      the assignment of Ordered Values to the response levels.
+
+Output Added:
+-------------
+Name:       ConvergenceStatus
+Label:      Convergence Status
+Template:   Stat.Logistic.MConvergenceStatus
+Path:       Logistic.ConvergenceStatus
+-------------
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+
+Output Added:
+-------------
+Name:       CumulativeModelTest
+Label:      Cumulative Model Test
+Template:   Stat.Logistic.ProportionalOdds
+Path:       Logistic.CumulativeModelTest
+-------------
+
+Output Added:
+-------------
+Name:       FitStatistics
+Label:      Fit Statistics
+Template:   Stat.Logistic.FitStatistics
+Path:       Logistic.FitStatistics
+-------------
+
+Output Added:
+-------------
+Name:       GlobalTests
+Label:      Global Tests
+Template:   Stat.Logistic.GlobalTests
+Path:       Logistic.GlobalTests
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   Stat.Logistic.ParameterEstimates
+Path:       Logistic.ParameterEstimates
+-------------
+
+Output Added:
+-------------
+Name:       OddsRatios
+Label:      Odds Ratios
+Template:   Stat.Logistic.OddsRatios
+Path:       Logistic.OddsRatios
+-------------
+
+Output Added:
+-------------
+Name:       Association
+Label:      Association Statistics
+Template:   Stat.Logistic.Association
+Path:       Logistic.Association
+-------------
+NOTE: There were 493310 observations read from the data set HW2.BTS201503_LOGISTIC.
+      WHERE cancelled=0;
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           15.45 seconds
+      cpu time            7.00 seconds
+
+
+194  quit ;
+195
+196  filename WIN "E:\1. Ms Academics\3. Spring Courses\3. IDS 594 - SaS\Assign 2\Weather_ord_2015_miss.txt";
+197
+198
+199  *3. Use appropriate SAS data step syntax to read the O'Hare 2015 weather file (Weather_ord_2015_miss.txt) into a SAS
+199! dataset. (Variables are Flight Date, Weather Station Name, Daily Precipitation (PRCP), Snow Depth on Ground (SNWD), Daily
+199! Snowfall (SNOW), Daily Low Temp (TEMPMIN), and  Daily High Temp (TEMPMAX)).;
+200
+201  DATA HW2.weather_ORD_201503 ;
+202  length flightdate 8. Station_Name $42. PRCP 4. SNWD 4. SNOW 4. TEMPMIN 4. TEMPMAX 4. ;
+203  INFILE WIN dsd delimiter='|' missover firstobs=2 obs=max ;
+204  format flightdate yymmdd10. ;
+205  INPUT flightdate :yymmdd10. Station_Name $ PRCP SNWD SNOW TEMPMIN TEMPMAX ;
+206  RUN;
+
+NOTE: The infile WIN is:
+      Filename=E:\1. Ms Academics\3. Spring Courses\3. IDS 594 - SaS\Assign 2\Weather_ord_2015_miss.txt,
+      RECFM=V,LRECL=32767,File Size (bytes)=24615,
+      Last Modified=16Feb2017:23:17:52,
+      Create Time=16Feb2017:23:17:52
+
+NOTE: 365 records were read from the infile WIN.
+      The minimum record length was 63.
+      The maximum record length was 72.
+NOTE: The data set HW2.WEATHER_ORD_201503 has 365 observations and 7 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.11 seconds
+      cpu time            0.07 seconds
+
+
+207
+208
+209  proc sort data = HW2.weather_ORD_201503;
+210  by flightdate;
+211  run;
+
+NOTE: There were 365 observations read from the data set HW2.WEATHER_ORD_201503.
+NOTE: The data set HW2.WEATHER_ORD_201503 has 365 observations and 7 variables.
+NOTE: PROCEDURE SORT used (Total process time):
+      real time           0.06 seconds
+      cpu time            0.01 seconds
+
+
+212
+213  proc sort data = HW2.BTS201503_Logistic;
+214  by flightdate;
+215  run;
+
+NOTE: There were 504312 observations read from the data set HW2.BTS201503_LOGISTIC.
+NOTE: The data set HW2.BTS201503_LOGISTIC has 504312 observations and 126 variables.
+NOTE: PROCEDURE SORT used (Total process time):
+      real time           11.34 seconds
+      cpu time            2.18 seconds
+
+
+216
+217  data HW2.ORD_merge201503;
+218  merge HW2.BTS201503_Logistic HW2.weather_ORD_201503;
+219  by flightdate;
+220  if origin='ORD' ;
+221  run;
+
+NOTE: There were 504312 observations read from the data set HW2.BTS201503_LOGISTIC.
+NOTE: There were 365 observations read from the data set HW2.WEATHER_ORD_201503.
+NOTE: The data set HW2.ORD_MERGE201503 has 26129 observations and 132 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.70 seconds
+      cpu time            0.43 seconds
+
+
+222
+223
+224  proc mi data=HW2.ORD_merge201503 nimpute=12 out=HW2.BTS201503_MI ;
+225  FCS ;
+226  var SNOW TEMPMIN TEMPMAX  ;
+227  run ;
+
+
+Output Added:
+-------------
+Name:       ModelInfo
+Label:      Model Information
+Template:   stat.mi.ModelInfo
+Path:       MI.ModelInfo
+-------------
+
+Output Added:
+-------------
+Name:       FcsModel
+Label:      FCS Model Specification
+Template:   stat.mi.FcsModel
+Path:       MI.FcsModel
+-------------
+
+Output Added:
+-------------
+Name:       MissPattern
+Label:      Missing Data Patterns
+Template:   stat.mi.MissPattern
+Path:       MI.MissPattern
+-------------
+
+Output Added:
+-------------
+Name:       VarianceInfo
+Label:      Variance Information
+Template:   stat.mi.VarianceInfo
+Path:       MI.VarianceInfo
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   stat.mi.ParameterEstimates
+Path:       MI.ParameterEstimates
+-------------
+NOTE: The data set HW2.BTS201503_MI has 313548 observations and 133 variables.
+NOTE: PROCEDURE MI used (Total process time):
+      real time           19.01 seconds
+      cpu time            13.31 seconds
+
+
+228
+229
+230  proc sort data=HW2.BTS201503_MI ;
+231  by _imputation_ ;
+232  run ;
+
+NOTE: There were 313548 observations read from the data set HW2.BTS201503_MI.
+NOTE: The data set HW2.BTS201503_MI has 313548 observations and 133 variables.
+NOTE: PROCEDURE SORT used (Total process time):
+      real time           5.19 seconds
+      cpu time            1.56 seconds
+
+
+233
+234
+235  proc logistic data=HW2.BTS201503_MI outest=HW2.BTS201503_MI_ANALYZE COVOUT ;
+236  class DepDelay (ref= '0')/param = ref;
+237  model DepDelay =
+238  CRSDepTime
+239  seqnum
+240  ArrDelayLagInd
+241  ArrDelayLag
+242  ArrDelayLagCum
+243  DepDelayLag2
+244  ArrDelayLag2
+245  CancelledLag1
+246  SNOW
+247  TEMPMIN
+248  TEMPMAX / link=logit ;
+249  where cancelled=0 and origin='ORD' ;
+250  by _imputation_ ;
+251  ods exclude ResponseProfile;
+252  run ;
+
+
+Output Added:
+-------------
+Name:       ModelInfo
+Label:      Model Information
+Template:   Stat.Logistic.ModelInfo
+Path:       Logistic.ByGroup1.ModelInfo
+-------------
+
+Output Added:
+-------------
+Name:       NObs
+Label:      Observations Summary
+Template:   Stat.Logistic.NObs
+Path:       Logistic.ByGroup1.NObs
+-------------
+NOTE: The REF= option for the response variable is ignored.
+NOTE: PROC LOGISTIC is fitting the cumulative logit model. The probabilities modeled are summed over the responses having the
+      lower Ordered Values in the Response Profile table. Use the response variable option DESCENDING if you want to reverse
+      the assignment of Ordered Values to the response levels.
+
+Output Added:
+-------------
+Name:       ConvergenceStatus
+Label:      Convergence Status
+Template:   Stat.Logistic.MConvergenceStatus
+Path:       Logistic.ByGroup1.ConvergenceStatus
+-------------
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+
+Output Added:
+-------------
+Name:       CumulativeModelTest
+Label:      Cumulative Model Test
+Template:   Stat.Logistic.ProportionalOdds
+Path:       Logistic.ByGroup1.CumulativeModelTest
+-------------
+
+Output Added:
+-------------
+Name:       FitStatistics
+Label:      Fit Statistics
+Template:   Stat.Logistic.FitStatistics
+Path:       Logistic.ByGroup1.FitStatistics
+-------------
+
+Output Added:
+-------------
+Name:       GlobalTests
+Label:      Global Tests
+Template:   Stat.Logistic.GlobalTests
+Path:       Logistic.ByGroup1.GlobalTests
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   Stat.Logistic.ParameterEstimates
+Path:       Logistic.ByGroup1.ParameterEstimates
+-------------
+
+Output Added:
+-------------
+Name:       OddsRatios
+Label:      Odds Ratios
+Template:   Stat.Logistic.OddsRatios
+Path:       Logistic.ByGroup1.OddsRatios
+-------------
+
+Output Added:
+-------------
+Name:       Association
+Label:      Association Statistics
+Template:   Stat.Logistic.Association
+Path:       Logistic.ByGroup1.Association
+-------------
+NOTE: The above message was for the following BY group:
+      Imputation Number=1
+
+Output Added:
+-------------
+Name:       ModelInfo
+Label:      Model Information
+Template:   Stat.Logistic.ModelInfo
+Path:       Logistic.ByGroup2.ModelInfo
+-------------
+
+Output Added:
+-------------
+Name:       NObs
+Label:      Observations Summary
+Template:   Stat.Logistic.NObs
+Path:       Logistic.ByGroup2.NObs
+-------------
+NOTE: The REF= option for the response variable is ignored.
+NOTE: PROC LOGISTIC is fitting the cumulative logit model. The probabilities modeled are summed over the responses having the
+      lower Ordered Values in the Response Profile table. Use the response variable option DESCENDING if you want to reverse
+      the assignment of Ordered Values to the response levels.
+
+Output Added:
+-------------
+Name:       ConvergenceStatus
+Label:      Convergence Status
+Template:   Stat.Logistic.MConvergenceStatus
+Path:       Logistic.ByGroup2.ConvergenceStatus
+-------------
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+
+Output Added:
+-------------
+Name:       CumulativeModelTest
+Label:      Cumulative Model Test
+Template:   Stat.Logistic.ProportionalOdds
+Path:       Logistic.ByGroup2.CumulativeModelTest
+-------------
+
+Output Added:
+-------------
+Name:       FitStatistics
+Label:      Fit Statistics
+Template:   Stat.Logistic.FitStatistics
+Path:       Logistic.ByGroup2.FitStatistics
+-------------
+
+Output Added:
+-------------
+Name:       GlobalTests
+Label:      Global Tests
+Template:   Stat.Logistic.GlobalTests
+Path:       Logistic.ByGroup2.GlobalTests
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   Stat.Logistic.ParameterEstimates
+Path:       Logistic.ByGroup2.ParameterEstimates
+-------------
+
+Output Added:
+-------------
+Name:       OddsRatios
+Label:      Odds Ratios
+Template:   Stat.Logistic.OddsRatios
+Path:       Logistic.ByGroup2.OddsRatios
+-------------
+
+Output Added:
+-------------
+Name:       Association
+Label:      Association Statistics
+Template:   Stat.Logistic.Association
+Path:       Logistic.ByGroup2.Association
+-------------
+NOTE: The above message was for the following BY group:
+      Imputation Number=2
+
+Output Added:
+-------------
+Name:       ModelInfo
+Label:      Model Information
+Template:   Stat.Logistic.ModelInfo
+Path:       Logistic.ByGroup3.ModelInfo
+-------------
+
+Output Added:
+-------------
+Name:       NObs
+Label:      Observations Summary
+Template:   Stat.Logistic.NObs
+Path:       Logistic.ByGroup3.NObs
+-------------
+NOTE: The REF= option for the response variable is ignored.
+NOTE: PROC LOGISTIC is fitting the cumulative logit model. The probabilities modeled are summed over the responses having the
+      lower Ordered Values in the Response Profile table. Use the response variable option DESCENDING if you want to reverse
+      the assignment of Ordered Values to the response levels.
+
+Output Added:
+-------------
+Name:       ConvergenceStatus
+Label:      Convergence Status
+Template:   Stat.Logistic.MConvergenceStatus
+Path:       Logistic.ByGroup3.ConvergenceStatus
+-------------
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+
+Output Added:
+-------------
+Name:       CumulativeModelTest
+Label:      Cumulative Model Test
+Template:   Stat.Logistic.ProportionalOdds
+Path:       Logistic.ByGroup3.CumulativeModelTest
+-------------
+
+Output Added:
+-------------
+Name:       FitStatistics
+Label:      Fit Statistics
+Template:   Stat.Logistic.FitStatistics
+Path:       Logistic.ByGroup3.FitStatistics
+-------------
+
+Output Added:
+-------------
+Name:       GlobalTests
+Label:      Global Tests
+Template:   Stat.Logistic.GlobalTests
+Path:       Logistic.ByGroup3.GlobalTests
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   Stat.Logistic.ParameterEstimates
+Path:       Logistic.ByGroup3.ParameterEstimates
+-------------
+
+Output Added:
+-------------
+Name:       OddsRatios
+Label:      Odds Ratios
+Template:   Stat.Logistic.OddsRatios
+Path:       Logistic.ByGroup3.OddsRatios
+-------------
+
+Output Added:
+-------------
+Name:       Association
+Label:      Association Statistics
+Template:   Stat.Logistic.Association
+Path:       Logistic.ByGroup3.Association
+-------------
+NOTE: The above message was for the following BY group:
+      Imputation Number=3
+
+Output Added:
+-------------
+Name:       ModelInfo
+Label:      Model Information
+Template:   Stat.Logistic.ModelInfo
+Path:       Logistic.ByGroup4.ModelInfo
+-------------
+
+Output Added:
+-------------
+Name:       NObs
+Label:      Observations Summary
+Template:   Stat.Logistic.NObs
+Path:       Logistic.ByGroup4.NObs
+-------------
+NOTE: The REF= option for the response variable is ignored.
+NOTE: PROC LOGISTIC is fitting the cumulative logit model. The probabilities modeled are summed over the responses having the
+      lower Ordered Values in the Response Profile table. Use the response variable option DESCENDING if you want to reverse
+      the assignment of Ordered Values to the response levels.
+
+Output Added:
+-------------
+Name:       ConvergenceStatus
+Label:      Convergence Status
+Template:   Stat.Logistic.MConvergenceStatus
+Path:       Logistic.ByGroup4.ConvergenceStatus
+-------------
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+
+Output Added:
+-------------
+Name:       CumulativeModelTest
+Label:      Cumulative Model Test
+Template:   Stat.Logistic.ProportionalOdds
+Path:       Logistic.ByGroup4.CumulativeModelTest
+-------------
+
+Output Added:
+-------------
+Name:       FitStatistics
+Label:      Fit Statistics
+Template:   Stat.Logistic.FitStatistics
+Path:       Logistic.ByGroup4.FitStatistics
+-------------
+
+Output Added:
+-------------
+Name:       GlobalTests
+Label:      Global Tests
+Template:   Stat.Logistic.GlobalTests
+Path:       Logistic.ByGroup4.GlobalTests
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   Stat.Logistic.ParameterEstimates
+Path:       Logistic.ByGroup4.ParameterEstimates
+-------------
+
+Output Added:
+-------------
+Name:       OddsRatios
+Label:      Odds Ratios
+Template:   Stat.Logistic.OddsRatios
+Path:       Logistic.ByGroup4.OddsRatios
+-------------
+
+Output Added:
+-------------
+Name:       Association
+Label:      Association Statistics
+Template:   Stat.Logistic.Association
+Path:       Logistic.ByGroup4.Association
+-------------
+NOTE: The above message was for the following BY group:
+      Imputation Number=4
+
+Output Added:
+-------------
+Name:       ModelInfo
+Label:      Model Information
+Template:   Stat.Logistic.ModelInfo
+Path:       Logistic.ByGroup5.ModelInfo
+-------------
+
+Output Added:
+-------------
+Name:       NObs
+Label:      Observations Summary
+Template:   Stat.Logistic.NObs
+Path:       Logistic.ByGroup5.NObs
+-------------
+NOTE: The REF= option for the response variable is ignored.
+NOTE: PROC LOGISTIC is fitting the cumulative logit model. The probabilities modeled are summed over the responses having the
+      lower Ordered Values in the Response Profile table. Use the response variable option DESCENDING if you want to reverse
+      the assignment of Ordered Values to the response levels.
+
+Output Added:
+-------------
+Name:       ConvergenceStatus
+Label:      Convergence Status
+Template:   Stat.Logistic.MConvergenceStatus
+Path:       Logistic.ByGroup5.ConvergenceStatus
+-------------
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+
+Output Added:
+-------------
+Name:       CumulativeModelTest
+Label:      Cumulative Model Test
+Template:   Stat.Logistic.ProportionalOdds
+Path:       Logistic.ByGroup5.CumulativeModelTest
+-------------
+
+Output Added:
+-------------
+Name:       FitStatistics
+Label:      Fit Statistics
+Template:   Stat.Logistic.FitStatistics
+Path:       Logistic.ByGroup5.FitStatistics
+-------------
+
+Output Added:
+-------------
+Name:       GlobalTests
+Label:      Global Tests
+Template:   Stat.Logistic.GlobalTests
+Path:       Logistic.ByGroup5.GlobalTests
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   Stat.Logistic.ParameterEstimates
+Path:       Logistic.ByGroup5.ParameterEstimates
+-------------
+
+Output Added:
+-------------
+Name:       OddsRatios
+Label:      Odds Ratios
+Template:   Stat.Logistic.OddsRatios
+Path:       Logistic.ByGroup5.OddsRatios
+-------------
+
+Output Added:
+-------------
+Name:       Association
+Label:      Association Statistics
+Template:   Stat.Logistic.Association
+Path:       Logistic.ByGroup5.Association
+-------------
+NOTE: The above message was for the following BY group:
+      Imputation Number=5
+
+Output Added:
+-------------
+Name:       ModelInfo
+Label:      Model Information
+Template:   Stat.Logistic.ModelInfo
+Path:       Logistic.ByGroup6.ModelInfo
+-------------
+
+Output Added:
+-------------
+Name:       NObs
+Label:      Observations Summary
+Template:   Stat.Logistic.NObs
+Path:       Logistic.ByGroup6.NObs
+-------------
+NOTE: The REF= option for the response variable is ignored.
+NOTE: PROC LOGISTIC is fitting the cumulative logit model. The probabilities modeled are summed over the responses having the
+      lower Ordered Values in the Response Profile table. Use the response variable option DESCENDING if you want to reverse
+      the assignment of Ordered Values to the response levels.
+
+Output Added:
+-------------
+Name:       ConvergenceStatus
+Label:      Convergence Status
+Template:   Stat.Logistic.MConvergenceStatus
+Path:       Logistic.ByGroup6.ConvergenceStatus
+-------------
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+
+Output Added:
+-------------
+Name:       CumulativeModelTest
+Label:      Cumulative Model Test
+Template:   Stat.Logistic.ProportionalOdds
+Path:       Logistic.ByGroup6.CumulativeModelTest
+-------------
+
+Output Added:
+-------------
+Name:       FitStatistics
+Label:      Fit Statistics
+Template:   Stat.Logistic.FitStatistics
+Path:       Logistic.ByGroup6.FitStatistics
+-------------
+
+Output Added:
+-------------
+Name:       GlobalTests
+Label:      Global Tests
+Template:   Stat.Logistic.GlobalTests
+Path:       Logistic.ByGroup6.GlobalTests
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   Stat.Logistic.ParameterEstimates
+Path:       Logistic.ByGroup6.ParameterEstimates
+-------------
+
+Output Added:
+-------------
+Name:       OddsRatios
+Label:      Odds Ratios
+Template:   Stat.Logistic.OddsRatios
+Path:       Logistic.ByGroup6.OddsRatios
+-------------
+
+Output Added:
+-------------
+Name:       Association
+Label:      Association Statistics
+Template:   Stat.Logistic.Association
+Path:       Logistic.ByGroup6.Association
+-------------
+NOTE: The above message was for the following BY group:
+      Imputation Number=6
+
+Output Added:
+-------------
+Name:       ModelInfo
+Label:      Model Information
+Template:   Stat.Logistic.ModelInfo
+Path:       Logistic.ByGroup7.ModelInfo
+-------------
+
+Output Added:
+-------------
+Name:       NObs
+Label:      Observations Summary
+Template:   Stat.Logistic.NObs
+Path:       Logistic.ByGroup7.NObs
+-------------
+NOTE: The REF= option for the response variable is ignored.
+NOTE: PROC LOGISTIC is fitting the cumulative logit model. The probabilities modeled are summed over the responses having the
+      lower Ordered Values in the Response Profile table. Use the response variable option DESCENDING if you want to reverse
+      the assignment of Ordered Values to the response levels.
+
+Output Added:
+-------------
+Name:       ConvergenceStatus
+Label:      Convergence Status
+Template:   Stat.Logistic.MConvergenceStatus
+Path:       Logistic.ByGroup7.ConvergenceStatus
+-------------
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+
+Output Added:
+-------------
+Name:       CumulativeModelTest
+Label:      Cumulative Model Test
+Template:   Stat.Logistic.ProportionalOdds
+Path:       Logistic.ByGroup7.CumulativeModelTest
+-------------
+
+Output Added:
+-------------
+Name:       FitStatistics
+Label:      Fit Statistics
+Template:   Stat.Logistic.FitStatistics
+Path:       Logistic.ByGroup7.FitStatistics
+-------------
+
+Output Added:
+-------------
+Name:       GlobalTests
+Label:      Global Tests
+Template:   Stat.Logistic.GlobalTests
+Path:       Logistic.ByGroup7.GlobalTests
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   Stat.Logistic.ParameterEstimates
+Path:       Logistic.ByGroup7.ParameterEstimates
+-------------
+
+Output Added:
+-------------
+Name:       OddsRatios
+Label:      Odds Ratios
+Template:   Stat.Logistic.OddsRatios
+Path:       Logistic.ByGroup7.OddsRatios
+-------------
+
+Output Added:
+-------------
+Name:       Association
+Label:      Association Statistics
+Template:   Stat.Logistic.Association
+Path:       Logistic.ByGroup7.Association
+-------------
+NOTE: The above message was for the following BY group:
+      Imputation Number=7
+
+Output Added:
+-------------
+Name:       ModelInfo
+Label:      Model Information
+Template:   Stat.Logistic.ModelInfo
+Path:       Logistic.ByGroup8.ModelInfo
+-------------
+
+Output Added:
+-------------
+Name:       NObs
+Label:      Observations Summary
+Template:   Stat.Logistic.NObs
+Path:       Logistic.ByGroup8.NObs
+-------------
+NOTE: The REF= option for the response variable is ignored.
+NOTE: PROC LOGISTIC is fitting the cumulative logit model. The probabilities modeled are summed over the responses having the
+      lower Ordered Values in the Response Profile table. Use the response variable option DESCENDING if you want to reverse
+      the assignment of Ordered Values to the response levels.
+
+Output Added:
+-------------
+Name:       ConvergenceStatus
+Label:      Convergence Status
+Template:   Stat.Logistic.MConvergenceStatus
+Path:       Logistic.ByGroup8.ConvergenceStatus
+-------------
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+
+Output Added:
+-------------
+Name:       CumulativeModelTest
+Label:      Cumulative Model Test
+Template:   Stat.Logistic.ProportionalOdds
+Path:       Logistic.ByGroup8.CumulativeModelTest
+-------------
+
+Output Added:
+-------------
+Name:       FitStatistics
+Label:      Fit Statistics
+Template:   Stat.Logistic.FitStatistics
+Path:       Logistic.ByGroup8.FitStatistics
+-------------
+
+Output Added:
+-------------
+Name:       GlobalTests
+Label:      Global Tests
+Template:   Stat.Logistic.GlobalTests
+Path:       Logistic.ByGroup8.GlobalTests
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   Stat.Logistic.ParameterEstimates
+Path:       Logistic.ByGroup8.ParameterEstimates
+-------------
+
+Output Added:
+-------------
+Name:       OddsRatios
+Label:      Odds Ratios
+Template:   Stat.Logistic.OddsRatios
+Path:       Logistic.ByGroup8.OddsRatios
+-------------
+
+Output Added:
+-------------
+Name:       Association
+Label:      Association Statistics
+Template:   Stat.Logistic.Association
+Path:       Logistic.ByGroup8.Association
+-------------
+NOTE: The above message was for the following BY group:
+      Imputation Number=8
+
+Output Added:
+-------------
+Name:       ModelInfo
+Label:      Model Information
+Template:   Stat.Logistic.ModelInfo
+Path:       Logistic.ByGroup9.ModelInfo
+-------------
+
+Output Added:
+-------------
+Name:       NObs
+Label:      Observations Summary
+Template:   Stat.Logistic.NObs
+Path:       Logistic.ByGroup9.NObs
+-------------
+NOTE: The REF= option for the response variable is ignored.
+NOTE: PROC LOGISTIC is fitting the cumulative logit model. The probabilities modeled are summed over the responses having the
+      lower Ordered Values in the Response Profile table. Use the response variable option DESCENDING if you want to reverse
+      the assignment of Ordered Values to the response levels.
+
+Output Added:
+-------------
+Name:       ConvergenceStatus
+Label:      Convergence Status
+Template:   Stat.Logistic.MConvergenceStatus
+Path:       Logistic.ByGroup9.ConvergenceStatus
+-------------
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+
+Output Added:
+-------------
+Name:       CumulativeModelTest
+Label:      Cumulative Model Test
+Template:   Stat.Logistic.ProportionalOdds
+Path:       Logistic.ByGroup9.CumulativeModelTest
+-------------
+
+Output Added:
+-------------
+Name:       FitStatistics
+Label:      Fit Statistics
+Template:   Stat.Logistic.FitStatistics
+Path:       Logistic.ByGroup9.FitStatistics
+-------------
+
+Output Added:
+-------------
+Name:       GlobalTests
+Label:      Global Tests
+Template:   Stat.Logistic.GlobalTests
+Path:       Logistic.ByGroup9.GlobalTests
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   Stat.Logistic.ParameterEstimates
+Path:       Logistic.ByGroup9.ParameterEstimates
+-------------
+
+Output Added:
+-------------
+Name:       OddsRatios
+Label:      Odds Ratios
+Template:   Stat.Logistic.OddsRatios
+Path:       Logistic.ByGroup9.OddsRatios
+-------------
+
+Output Added:
+-------------
+Name:       Association
+Label:      Association Statistics
+Template:   Stat.Logistic.Association
+Path:       Logistic.ByGroup9.Association
+-------------
+NOTE: The above message was for the following BY group:
+      Imputation Number=9
+
+Output Added:
+-------------
+Name:       ModelInfo
+Label:      Model Information
+Template:   Stat.Logistic.ModelInfo
+Path:       Logistic.ByGroup10.ModelInfo
+-------------
+
+Output Added:
+-------------
+Name:       NObs
+Label:      Observations Summary
+Template:   Stat.Logistic.NObs
+Path:       Logistic.ByGroup10.NObs
+-------------
+NOTE: The REF= option for the response variable is ignored.
+NOTE: PROC LOGISTIC is fitting the cumulative logit model. The probabilities modeled are summed over the responses having the
+      lower Ordered Values in the Response Profile table. Use the response variable option DESCENDING if you want to reverse
+      the assignment of Ordered Values to the response levels.
+
+Output Added:
+-------------
+Name:       ConvergenceStatus
+Label:      Convergence Status
+Template:   Stat.Logistic.MConvergenceStatus
+Path:       Logistic.ByGroup10.ConvergenceStatus
+-------------
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+
+Output Added:
+-------------
+Name:       CumulativeModelTest
+Label:      Cumulative Model Test
+Template:   Stat.Logistic.ProportionalOdds
+Path:       Logistic.ByGroup10.CumulativeModelTest
+-------------
+
+Output Added:
+-------------
+Name:       FitStatistics
+Label:      Fit Statistics
+Template:   Stat.Logistic.FitStatistics
+Path:       Logistic.ByGroup10.FitStatistics
+-------------
+
+Output Added:
+-------------
+Name:       GlobalTests
+Label:      Global Tests
+Template:   Stat.Logistic.GlobalTests
+Path:       Logistic.ByGroup10.GlobalTests
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   Stat.Logistic.ParameterEstimates
+Path:       Logistic.ByGroup10.ParameterEstimates
+-------------
+
+Output Added:
+-------------
+Name:       OddsRatios
+Label:      Odds Ratios
+Template:   Stat.Logistic.OddsRatios
+Path:       Logistic.ByGroup10.OddsRatios
+-------------
+
+Output Added:
+-------------
+Name:       Association
+Label:      Association Statistics
+Template:   Stat.Logistic.Association
+Path:       Logistic.ByGroup10.Association
+-------------
+NOTE: The above message was for the following BY group:
+      Imputation Number=10
+
+Output Added:
+-------------
+Name:       ModelInfo
+Label:      Model Information
+Template:   Stat.Logistic.ModelInfo
+Path:       Logistic.ByGroup11.ModelInfo
+-------------
+
+Output Added:
+-------------
+Name:       NObs
+Label:      Observations Summary
+Template:   Stat.Logistic.NObs
+Path:       Logistic.ByGroup11.NObs
+-------------
+NOTE: The REF= option for the response variable is ignored.
+NOTE: PROC LOGISTIC is fitting the cumulative logit model. The probabilities modeled are summed over the responses having the
+      lower Ordered Values in the Response Profile table. Use the response variable option DESCENDING if you want to reverse
+      the assignment of Ordered Values to the response levels.
+
+Output Added:
+-------------
+Name:       ConvergenceStatus
+Label:      Convergence Status
+Template:   Stat.Logistic.MConvergenceStatus
+Path:       Logistic.ByGroup11.ConvergenceStatus
+-------------
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+
+Output Added:
+-------------
+Name:       CumulativeModelTest
+Label:      Cumulative Model Test
+Template:   Stat.Logistic.ProportionalOdds
+Path:       Logistic.ByGroup11.CumulativeModelTest
+-------------
+
+Output Added:
+-------------
+Name:       FitStatistics
+Label:      Fit Statistics
+Template:   Stat.Logistic.FitStatistics
+Path:       Logistic.ByGroup11.FitStatistics
+-------------
+
+Output Added:
+-------------
+Name:       GlobalTests
+Label:      Global Tests
+Template:   Stat.Logistic.GlobalTests
+Path:       Logistic.ByGroup11.GlobalTests
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   Stat.Logistic.ParameterEstimates
+Path:       Logistic.ByGroup11.ParameterEstimates
+-------------
+
+Output Added:
+-------------
+Name:       OddsRatios
+Label:      Odds Ratios
+Template:   Stat.Logistic.OddsRatios
+Path:       Logistic.ByGroup11.OddsRatios
+-------------
+
+Output Added:
+-------------
+Name:       Association
+Label:      Association Statistics
+Template:   Stat.Logistic.Association
+Path:       Logistic.ByGroup11.Association
+-------------
+NOTE: The above message was for the following BY group:
+      Imputation Number=11
+
+Output Added:
+-------------
+Name:       ModelInfo
+Label:      Model Information
+Template:   Stat.Logistic.ModelInfo
+Path:       Logistic.ByGroup12.ModelInfo
+-------------
+
+Output Added:
+-------------
+Name:       NObs
+Label:      Observations Summary
+Template:   Stat.Logistic.NObs
+Path:       Logistic.ByGroup12.NObs
+-------------
+NOTE: The REF= option for the response variable is ignored.
+NOTE: PROC LOGISTIC is fitting the cumulative logit model. The probabilities modeled are summed over the responses having the
+      lower Ordered Values in the Response Profile table. Use the response variable option DESCENDING if you want to reverse
+      the assignment of Ordered Values to the response levels.
+
+Output Added:
+-------------
+Name:       ConvergenceStatus
+Label:      Convergence Status
+Template:   Stat.Logistic.MConvergenceStatus
+Path:       Logistic.ByGroup12.ConvergenceStatus
+-------------
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+
+Output Added:
+-------------
+Name:       CumulativeModelTest
+Label:      Cumulative Model Test
+Template:   Stat.Logistic.ProportionalOdds
+Path:       Logistic.ByGroup12.CumulativeModelTest
+-------------
+
+Output Added:
+-------------
+Name:       FitStatistics
+Label:      Fit Statistics
+Template:   Stat.Logistic.FitStatistics
+Path:       Logistic.ByGroup12.FitStatistics
+-------------
+
+Output Added:
+-------------
+Name:       GlobalTests
+Label:      Global Tests
+Template:   Stat.Logistic.GlobalTests
+Path:       Logistic.ByGroup12.GlobalTests
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   Stat.Logistic.ParameterEstimates
+Path:       Logistic.ByGroup12.ParameterEstimates
+-------------
+
+Output Added:
+-------------
+Name:       OddsRatios
+Label:      Odds Ratios
+Template:   Stat.Logistic.OddsRatios
+Path:       Logistic.ByGroup12.OddsRatios
+-------------
+
+Output Added:
+-------------
+Name:       Association
+Label:      Association Statistics
+Template:   Stat.Logistic.Association
+Path:       Logistic.ByGroup12.Association
+-------------
+NOTE: The above message was for the following BY group:
+      Imputation Number=12
+NOTE: There were 305112 observations read from the data set HW2.BTS201503_MI.
+      WHERE (cancelled=0) and (origin='ORD');
+NOTE: The data set HW2.BTS201503_MI_ANALYZE has 4044 observations and 343 variables.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           13:36.23
+      cpu time            13:10.29
+
+
+252!       quit ;
+253
+254  /*proc to evaluate the Multiple Imputation parameter estimates for tempmin, tempmax, and snow.*/
+255  proc mianalyze data=HW2.BTS201503_MI_ANALYZE ;
+256  modeleffects SNOW TEMPMIN TEMPMAX ;
+257  run ;
+
+
+Output Added:
+-------------
+Name:       ModelInfo
+Label:      Model Information
+Template:   stat.mianalyze.ModelInfo
+Path:       MIAnalyze.ModelInfo
+-------------
+
+Output Added:
+-------------
+Name:       VarianceInfo
+Label:      Variance Information
+Template:   stat.mianalyze.VarianceInfo
+Path:       MIAnalyze.VarianceInfo
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   stat.mianalyze.ParameterEstimates
+Path:       MIAnalyze.ParameterEstimates
+-------------
+NOTE: PROCEDURE MIANALYZE used (Total process time):
+      real time           0.18 seconds
+      cpu time            0.09 seconds
+
+
+258
+259
+260  ods trace off;
+261  ods pdf close;
+NOTE: ODS PDF printed 136 pages to E:\1. Ms Academics\3. Spring Courses\3. IDS 594 - SaS\Assign 2\\HW2_SpurthiBollina.pdf.

@@ -1,0 +1,1974 @@
+1    dm 'clear log';
+2
+3    title "&sysuserid - HW1";
+4    ods pdf file = "E:\1. Ms Academics\3. Spring Courses\3. IDS 594 - SaS\Assign 1\HW1_Q2_OutPut.pdf";
+NOTE: Writing ODS PDF output to DISK destination
+      "E:\1. Ms Academics\3. Spring Courses\3. IDS 594 - SaS\Assign 1\HW1_Q2_OutPut.pdf", printer "PDF".
+5    ods trace on;
+6
+7    filename in201506 "E:\1. Ms Academics\3. Spring Courses\3. IDS 594 - SaS\Assign 1\On_Time_On_Time_Performance_2015_6.csv";
+8
+9    data WORK.BTS201506
+10   (drop = CRSDepTime DepTime CRSArrTime ArrTime FirstDepTime WheelsOff WheelsOn Div1WheelsOn Div1WheelsOff Div2WheelsOn
+11   Div2WheelsOff Div3WheelsOn Div3WheelsOff Div4WheelsOn Div4WheelsOff Div5WheelsOn Div5WheelsOff
+12   rename =(CRSDepTimeF=CRSDepTime DepTimeF=DepTime CRSArrTimeF=CRSArrTime ArrTimeF=ArrTime FirstDepTimeF=FirstDepTime
+13   WheelsOffF=WheelsOff WheelsOnF=WheelsOn Div1WheelsOnF=Div1WheelsOn Div1WheelsOffF=Div1WheelsOff Div2WheelsOnF=Div2WheelsOn
+14   Div2WheelsOffF=Div2WheelsOff Div3WheelsOnF=Div3WheelsOn Div3WheelsOffF=Div3WheelsOff Div4WheelsOnF=Div4WheelsOn
+15   Div4WheelsOffF=Div4WheelsOff Div5WheelsOnF=Div5WheelsOn Div5WheelsOffF=Div5WheelsOff) ) ;
+16
+17   infile in201506 dsd delimiter="," dlmstr=',' missover firstobs=2 obs=50 ;
+18
+19   length Year 4. Quarter 4. Month 4. DayofMonth 4. DayOfWeek 4. FlightDate 8. UniqueCarrier $8. AirlineID  $4.
+20   Carrier  $4. TailNum  $10. FlightNum  $4. OriginAirportID  $8. OriginAirportSeqID  $8. OriginCityMarketID  $6. Origin
+20 ! $32.
+21   OriginCityName  $32. OriginState  $32. OriginStateFips  $32. OriginStateName  $32. OriginWac  $32. DestAirportID  $6.
+22   DestAirportSeqID  $6. DestCityMarketID  $6. Dest  $32. DestCityName  $32. DestState  $32. DestStateFips  $32.
+23   DestStateName  $32. DestWac  $32. CRSDepTime  $8. CRSDepTimeF 8. DepTime  $8. DepTimeF  8. DepDelay 4. DepDelayMinutes 4.
+24   DepDel15 4. DepartureDelayGroups 4. DepTimeBlk  $9. TaxiOut 4. WheelsOff  $8. WheelsOffF  8. WheelsOn  $8. WheelsOnF  8.
+25   TaxiIn 4. CRSArrTime  $8. CRSArrTimeF  8. ArrTime  $8. ArrTimeF  8. ArrDelay 4. ArrDelayMinutes 4. ArrDel15 4.
+26   ArrivalDelayGroups  4. ArrTimeBlk  $9. Cancelled 4. CancellationCode  $8. Diverted  4. CRSElapsedTime 4. ActualElapsedTime
+26 !  4.
+27   AirTime 4. Flights 4. Distance 4. DistanceGroup 4. CarrierDelay 4. WeatherDelay 4. NASDelay 4. SecurityDelay 4.
+27 ! LateAircraftDelay 4.
+28   FirstDepTime  $8. FirstDepTimeF  8. TotalAddGTime 4. LongestAddGTime 4. DivAirportLandings 4. DivReachedDest 4.
+28 ! DivActualElapsedTime 4. DivArrDelay 4.
+29   DivDistance 4. Div1Airport  $8. Div1AirportID  $8. Div1AirportSeqID  $8. Div1WheelsOn  $8. Div1WheelsOnF  8.
+29 ! Div1TotalGTime 4. Div1LongestGTime 4.
+30   Div1WheelsOff  $8. Div1WheelsOffF  8. Div1TailNum  $8. Div2Airport  $8. Div2AirportID  $8. Div2AirportSeqID  $8.
+30 ! Div2WheelsOn  $8. Div2WheelsOnF  8. Div2TotalGTime 4.
+31   Div2LongestGTime 4. Div2WheelsOff  $8. Div2WheelsOffF  8. Div2TailNum  $8. Div3Airport  $8. Div3AirportID  $8.
+31 ! Div3AirportSeqID  $8. Div3WheelsOn  $8. Div3WheelsOnF  8.
+32   Div3TotalGTime 4. Div3LongestGTime 4. Div3WheelsOff  $8. Div3WheelsOffF  8. Div3TailNum  $8. Div4Airport  $8.
+32 ! Div4AirportID  $8. Div4AirportSeqID  $8.
+33   Div4WheelsOn  $8. Div4WheelsOnF  8. Div4TotalGTime 4. Div4LongestGTime 4. Div4WheelsOff  $8. Div4WheelsOffF  8.
+33 ! Div4TailNum  $8. Div5Airport  $8. Div5AirportID  $8.
+34   Div5AirportSeqID  $8. Div5WheelsOn  $8. Div5WheelsOnF  8. Div5TotalGTime 4. Div5LongestGTime 4. Div5WheelsOff  $8.
+34 ! Div5WheelsOffF  8. Div5TailNum   $8.  ;
+35
+36   format flightdate yymmdd10. ;
+37
+38   input Year Quarter Month DayofMonth DayOfWeek FlightDate :yymmdd10. UniqueCarrier $ AirlineID $ Carrier $ TailNum $
+38 ! FlightNum $
+39   OriginAirportID $ OriginAirportSeqID $ OriginCityMarketID $ Origin $ OriginCityName $ OriginState $ OriginStateFips $
+40   OriginStateName $ OriginWac $ DestAirportID $ DestAirportSeqID $ DestCityMarketID $ Dest $ DestCityName $ DestState $
+41   DestStateFips $ DestStateName $ DestWac $ CRSDepTime $ DepTime $ DepDelay DepDelayMinutes DepDel15 DepartureDelayGroups
+42   DepTimeBlk $ TaxiOut WheelsOff $ WheelsOn $ TaxiIn CRSArrTime $ ArrTime $ ArrDelay ArrDelayMinutes ArrDel15
+42 ! ArrivalDelayGroups
+43   ArrTimeBlk $ Cancelled CancellationCode $ Diverted CRSElapsedTime ActualElapsedTime AirTime Flights Distance DistanceGroup
+44   CarrierDelay WeatherDelay NASDelay SecurityDelay LateAircraftDelay FirstDepTime $ TotalAddGTime LongestAddGTime
+45   DivAirportLandings DivReachedDest DivActualElapsedTime DivArrDelay DivDistance Div1Airport $ Div1AirportID $
+45 ! Div1AirportSeqID $
+46   Div1WheelsOn $ Div1TotalGTime Div1LongestGTime Div1WheelsOff $ Div1TailNum $ Div2Airport $ Div2AirportID $
+46 ! Div2AirportSeqID $
+47   Div2WheelsOn $ Div2TotalGTime Div2LongestGTime Div2WheelsOff $ Div2TailNum $ Div3Airport $ Div3AirportID $
+47 ! Div3AirportSeqID $
+48   Div3WheelsOn $ Div3TotalGTime Div3LongestGTime Div3WheelsOff $ Div3TailNum $ Div4Airport $ Div4AirportID $
+48 ! Div4AirportSeqID $
+49   Div4WheelsOn $ Div4TotalGTime Div4LongestGTime Div4WheelsOff $ Div4TailNum $ Div5Airport $ Div5AirportID $
+49 ! Div5AirportSeqID $
+50   Div5WheelsOn $ Div5TotalGTime Div5LongestGTime Div5WheelsOff $ Div5TailNum  $ ;
+51
+52   %let droprenamemv = (drop = CRSDepTime DepTime CRSArrTime ArrTime FirstDepTime WheelsOff WheelsOn Div1WheelsOn
+52 ! Div1WheelsOff Div2WheelsOn
+53   Div2WheelsOff Div3WheelsOn Div3WheelsOff Div4WheelsOn Div4WheelsOff Div5WheelsOn Div5WheelsOff
+54   rename =(CRSDepTimeF=CRSDepTime DepTimeF=DepTime CRSArrTimeF=CRSArrTime ArrTimeF=ArrTime FirstDepTimeF=FirstDepTime
+55   WheelsOffF=WheelsOff WheelsOnF=WheelsOn Div1WheelsOnF=Div1WheelsOn Div1WheelsOffF=Div1WheelsOff Div2WheelsOnF=Div2WheelsOn
+56   Div2WheelsOffF=Div2WheelsOff Div3WheelsOnF=Div3WheelsOn Div3WheelsOffF=Div3WheelsOff Div4WheelsOnF=Div4WheelsOn
+57   Div4WheelsOffF=Div4WheelsOff Div5WheelsOnF=Div5WheelsOn Div5WheelsOffF=Div5WheelsOff) ) ;
+58
+59   %let lengthmv = length Year 4. Quarter 4. Month 4. DayofMonth 4. DayOfWeek 4. FlightDate 8. UniqueCarrier $8. AirlineID
+59 ! $4.
+60   Carrier  $4. TailNum  $10. FlightNum  $4. OriginAirportID  $8. OriginAirportSeqID  $8. OriginCityMarketID  $6. Origin
+60 ! $32.
+61   OriginCityName  $32. OriginState  $32. OriginStateFips  $32. OriginStateName  $32. OriginWac  $32. DestAirportID  $6.
+62   DestAirportSeqID  $6. DestCityMarketID  $6. Dest  $32. DestCityName  $32. DestState  $32. DestStateFips  $32.
+63   DestStateName  $32. DestWac  $32. CRSDepTime  $8. CRSDepTimeF 8. DepTime  $8. DepTimeF  8. DepDelay 4. DepDelayMinutes 4.
+64   DepDel15 4. DepartureDelayGroups 4. DepTimeBlk  $9. TaxiOut 4. WheelsOff  $8. WheelsOffF  8. WheelsOn  $8. WheelsOnF  8.
+65   TaxiIn 4. CRSArrTime  $8. CRSArrTimeF  8. ArrTime  $8. ArrTimeF  8. ArrDelay 4. ArrDelayMinutes 4. ArrDel15 4.
+66   ArrivalDelayGroups  4. ArrTimeBlk  $9. Cancelled 4. CancellationCode  $8. Diverted  4. CRSElapsedTime 4. ActualElapsedTime
+66 !  4.
+67   AirTime 4. Flights 4. Distance 4. DistanceGroup 4. CarrierDelay 4. WeatherDelay 4. NASDelay 4. SecurityDelay 4.
+67 ! LateAircraftDelay 4.
+68   FirstDepTime  $8. FirstDepTimeF  8. TotalAddGTime 4. LongestAddGTime 4. DivAirportLandings 4. DivReachedDest 4.
+68 ! DivActualElapsedTime 4. DivArrDelay 4.
+69   DivDistance 4. Div1Airport  $8. Div1AirportID  $8. Div1AirportSeqID  $8. Div1WheelsOn  $8. Div1WheelsOnF  8.
+69 ! Div1TotalGTime 4. Div1LongestGTime 4.
+70   Div1WheelsOff  $8. Div1WheelsOffF  8. Div1TailNum  $8. Div2Airport  $8. Div2AirportID  $8. Div2AirportSeqID  $8.
+70 ! Div2WheelsOn  $8. Div2WheelsOnF  8. Div2TotalGTime 4.
+71   Div2LongestGTime 4. Div2WheelsOff  $8. Div2WheelsOffF  8. Div2TailNum  $8. Div3Airport  $8. Div3AirportID  $8.
+71 ! Div3AirportSeqID  $8. Div3WheelsOn  $8. Div3WheelsOnF  8.
+72   Div3TotalGTime 4. Div3LongestGTime 4. Div3WheelsOff  $8. Div3WheelsOffF  8. Div3TailNum  $8. Div4Airport  $8.
+72 ! Div4AirportID  $8. Div4AirportSeqID  $8.
+73   Div4WheelsOn  $8. Div4WheelsOnF  8. Div4TotalGTime 4. Div4LongestGTime 4. Div4WheelsOff  $8. Div4WheelsOffF  8.
+73 ! Div4TailNum  $8. Div5Airport  $8. Div5AirportID  $8.
+74   Div5AirportSeqID  $8. Div5WheelsOn  $8. Div5WheelsOnF  8. Div5TotalGTime 4. Div5LongestGTime 4. Div5WheelsOff  $8.
+74 ! Div5WheelsOffF  8. Div5TailNum   $8.  ;
+75
+76   %let inputmv = input Year Quarter Month DayofMonth DayOfWeek FlightDate :yymmdd10. UniqueCarrier $ AirlineID $ Carrier $
+76 ! TailNum $ FlightNum $
+77   OriginAirportID $ OriginAirportSeqID $ OriginCityMarketID $ Origin $ OriginCityName $ OriginState $ OriginStateFips $
+78   OriginStateName $ OriginWac $ DestAirportID $ DestAirportSeqID $ DestCityMarketID $ Dest $ DestCityName $ DestState $
+79   DestStateFips $ DestStateName $ DestWac $ CRSDepTime $ DepTime $ DepDelay DepDelayMinutes DepDel15 DepartureDelayGroups
+80   DepTimeBlk $ TaxiOut WheelsOff $ WheelsOn $ TaxiIn CRSArrTime $ ArrTime $ ArrDelay ArrDelayMinutes ArrDel15
+80 ! ArrivalDelayGroups
+81   ArrTimeBlk $ Cancelled CancellationCode $ Diverted CRSElapsedTime ActualElapsedTime AirTime Flights Distance DistanceGroup
+82   CarrierDelay WeatherDelay NASDelay SecurityDelay LateAircraftDelay FirstDepTime $ TotalAddGTime LongestAddGTime
+83   DivAirportLandings DivReachedDest DivActualElapsedTime DivArrDelay DivDistance Div1Airport $ Div1AirportID $
+83 ! Div1AirportSeqID $
+84   Div1WheelsOn $ Div1TotalGTime Div1LongestGTime Div1WheelsOff $ Div1TailNum $ Div2Airport $ Div2AirportID $
+84 ! Div2AirportSeqID $
+85   Div2WheelsOn $ Div2TotalGTime Div2LongestGTime Div2WheelsOff $ Div2TailNum $ Div3Airport $ Div3AirportID $
+85 ! Div3AirportSeqID $
+86   Div3WheelsOn $ Div3TotalGTime Div3LongestGTime Div3WheelsOff $ Div3TailNum $ Div4Airport $ Div4AirportID $
+86 ! Div4AirportSeqID $
+87   Div4WheelsOn $ Div4TotalGTime Div4LongestGTime Div4WheelsOff $ Div4TailNum $ Div5Airport $ Div5AirportID $
+87 ! Div5AirportSeqID $
+88   Div5WheelsOn $ Div5TotalGTime Div5LongestGTime Div5WheelsOff $ Div5TailNum  $ ;
+89
+90   %macro timevars ;
+91   if CRSDepTime="2400" then do ;
+92       CRSDepTimeF=input("23:59", time5.) ; end ;
+93           else do ;
+94               format CRSDepTimeF time5. ;
+95               CRSDepTimeF=input(substr(CRSDepTime,1,2)||":"||substr(CRSDepTime,3,2), time5.) ; end ;
+96
+97   %mend ;
+98
+
+NOTE: Variable CRSDepTimeF is uninitialized.
+NOTE: Variable DepTimeF is uninitialized.
+NOTE: Variable WheelsOffF is uninitialized.
+NOTE: Variable WheelsOnF is uninitialized.
+NOTE: Variable CRSArrTimeF is uninitialized.
+NOTE: Variable ArrTimeF is uninitialized.
+NOTE: Variable FirstDepTimeF is uninitialized.
+NOTE: Variable Div1WheelsOnF is uninitialized.
+NOTE: Variable Div1WheelsOffF is uninitialized.
+NOTE: Variable Div2WheelsOnF is uninitialized.
+NOTE: Variable Div2WheelsOffF is uninitialized.
+NOTE: Variable Div3WheelsOnF is uninitialized.
+NOTE: Variable Div3WheelsOffF is uninitialized.
+NOTE: Variable Div4WheelsOnF is uninitialized.
+NOTE: Variable Div4WheelsOffF is uninitialized.
+NOTE: Variable Div5WheelsOnF is uninitialized.
+NOTE: Variable Div5WheelsOffF is uninitialized.
+NOTE: The infile IN201506 is:
+      Filename=E:\1. Ms Academics\3. Spring Courses\3. IDS 594 - SaS\Assign 1\On_Time_On_Time_Performance_2015_6.csv,
+      RECFM=V,LRECL=32767,
+      File Size (bytes)=227418780,
+      Last Modified=02Feb2017:16:21:47,
+      Create Time=02Feb2017:16:21:23
+
+NOTE: 49 records were read from the infile IN201506.
+      The minimum record length was 445.
+      The maximum record length was 479.
+NOTE: The data set WORK.BTS201506 has 49 observations and 109 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.41 seconds
+      cpu time            0.26 seconds
+
+
+99   data BTS201506 &droprenamemv. ;
+100  infile in201506 delimiter="," dsd dlmstr=',' missover firstobs=2 obs=550000 ;
+101
+102  &lengthmv. ;
+103  format flightdate yymmdd10. ;
+104  &inputmv. ;
+105
+106  %timevars ;
+107
+108  run ;
+
+NOTE: Variable DepTimeF is uninitialized.
+NOTE: Variable WheelsOffF is uninitialized.
+NOTE: Variable WheelsOnF is uninitialized.
+NOTE: Variable CRSArrTimeF is uninitialized.
+NOTE: Variable ArrTimeF is uninitialized.
+NOTE: Variable FirstDepTimeF is uninitialized.
+NOTE: Variable Div1WheelsOnF is uninitialized.
+NOTE: Variable Div1WheelsOffF is uninitialized.
+NOTE: Variable Div2WheelsOnF is uninitialized.
+NOTE: Variable Div2WheelsOffF is uninitialized.
+NOTE: Variable Div3WheelsOnF is uninitialized.
+NOTE: Variable Div3WheelsOffF is uninitialized.
+NOTE: Variable Div4WheelsOnF is uninitialized.
+NOTE: Variable Div4WheelsOffF is uninitialized.
+NOTE: Variable Div5WheelsOnF is uninitialized.
+NOTE: Variable Div5WheelsOffF is uninitialized.
+NOTE: The infile IN201506 is:
+      Filename=E:\1. Ms Academics\3. Spring Courses\3. IDS 594 - SaS\Assign 1\On_Time_On_Time_Performance_2015_6.csv,
+      RECFM=V,LRECL=32767,
+      File Size (bytes)=227418780,
+      Last Modified=02Feb2017:16:21:47,
+      Create Time=02Feb2017:16:21:23
+
+NOTE: 503897 records were read from the infile IN201506.
+      The minimum record length was 362.
+      The maximum record length was 531.
+NOTE: The data set WORK.BTS201506 has 503897 observations and 109 variables.
+NOTE: DATA statement used (Total process time):
+      real time           12.88 seconds
+      cpu time            5.32 seconds
+
+
+109
+110  proc sort data=BTS201506 ;
+111  by Carrier TailNum FlightDate DepTime;
+112  run ;
+
+NOTE: There were 503897 observations read from the data set WORK.BTS201506.
+NOTE: The data set WORK.BTS201506 has 503897 observations and 109 variables.
+NOTE: PROCEDURE SORT used (Total process time):
+      real time           10.69 seconds
+      cpu time            2.45 seconds
+
+
+113
+114
+115  data BTS_lag_delays_201506 ;
+116  retain DepDelayLag 0 DepDelayLagCum 0 ArrDelayLag ArrDelayLagCum 0 Carrier TailNum FlightDate DepDelay ArrDelay ;
+117  format flightdate yymmdd10. SeqNum DepDelayLagInd DepDelayLag DepDelayLagCum ArrDelayLagInd ArrDelayLag ArrDelayLagCum 4.;
+118  set BTS201506 ;
+119  by Carrier TailNum FlightDate ;
+120  if first.FlightDate=1 then do ;
+121      DepDelayLag=0 ;
+122      DepDelayLagInd=0 ;
+123      DepDelayLagCum=0 ;
+124
+125      ArrDelayLag=0 ;
+126      ArrDelayLagInd=0 ;
+127      ArrDelayLagCum=0 ;
+128
+129      SeqNum=1 ;
+130  end ;
+131
+132  else do ;
+133      SeqNum+1 ;
+134      DepDelayLagInd=(DepDelayLag^=0) ;
+135      DepDelayLagCum+DepDelayLag ;
+136      ArrDelayLagInd=(ArrDelayLag^=0) ;
+137      ArrDelayLagCum+ArrDelayLag ;
+138  end ;
+139  output ;
+140  DepDelayLag=DepDelay ;
+141  ArrDelayLag=ArrDelay ;
+142  run ;
+
+NOTE: There were 503897 observations read from the data set WORK.BTS201506.
+NOTE: The data set WORK.BTS_LAG_DELAYS_201506 has 503897 observations and 116 variables.
+NOTE: DATA statement used (Total process time):
+      real time           12.21 seconds
+      cpu time            2.10 seconds
+
+
+143
+144
+145  data BTS_lag_delays2_201506 ;
+146  retain DepDelayLag2 0 DepDelayLagCum2 0 ArrDelayLag2 ArrDelayLagCum2 0 DepDelayLag DepDelayLagCum ArrDelayLag
+146! ArrDelayLagCum  DepDelayLagInd2 ArrDelayLagInd2 SeqNum DepDelay ArrDelay Carrier TailNum FlightDate ;
+147  format flightdate yymmdd10. DepDelayLagInd2 DepDelayLag2 DepDelayLagCum2 ArrDelayLagInd2 ArrDelayLag2 ArrDelayLagCum2 4.;
+148  set BTS_lag_delays_201506 ;
+149  by Carrier TailNum FlightDate ;
+150  if SeqNum<=2 then do ;
+151      DepDelayLag2=0 ;
+152      DepDelayLagInd2=0 ;
+153      DepDelayLagCum2=0 ;
+154
+155      ArrDelayLag2=0 ;
+156      ArrDelayLagInd2=0 ;
+157      ArrDelayLagCum2=0 ;
+158  end ;
+159  else do ;
+160      DepDelayLagInd2=(DepDelayLag2^=0) ;
+161      DepDelayLagCum2+DepDelayLag2 ;
+162      ArrDelayLagInd2=(ArrDelayLag2^=0) ;
+163      ArrDelayLagCum2+ArrDelayLag2 ;
+164  end ;
+165  output ;
+166  DepDelayLag2=Lag(DepDelay) ;
+167  ArrDelayLag2=Lag(ArrDelay) ;
+168  run ;
+
+NOTE: There were 503897 observations read from the data set WORK.BTS_LAG_DELAYS_201506.
+NOTE: The data set WORK.BTS_LAG_DELAYS2_201506 has 503897 observations and 122 variables.
+NOTE: DATA statement used (Total process time):
+      real time           11.13 seconds
+      cpu time            2.43 seconds
+
+
+169
+170  proc UNIVARIATE data= BTS_lag_delays2_201506;
+NOTE: Writing HTML Body file: sashtml.htm
+171  var ArrDelay ArrDelayLag ArrDelayLag2;
+172  histogram ArrDelay ArrDelayLag ArrDelayLag2;
+173  histogram ArrDelay ArrDelayLag ArrDelayLag2 / normal lognormal (Theta=est Color=Red);
+174  RUN;
+
+
+Output Added:
+-------------
+Name:       Moments
+Label:      Moments
+Template:   base.univariate.Moments
+Path:       Univariate.ArrDelay.Moments
+-------------
+
+Output Added:
+-------------
+Name:       BasicMeasures
+Label:      Basic Measures of Location and Variability
+Template:   base.univariate.Measures
+Path:       Univariate.ArrDelay.BasicMeasures
+-------------
+
+Output Added:
+-------------
+Name:       TestsForLocation
+Label:      Tests For Location
+Template:   base.univariate.Location
+Path:       Univariate.ArrDelay.TestsForLocation
+-------------
+
+Output Added:
+-------------
+Name:       Quantiles
+Label:      Quantiles
+Template:   base.univariate.Quantiles
+Path:       Univariate.ArrDelay.Quantiles
+-------------
+
+Output Added:
+-------------
+Name:       ExtremeObs
+Label:      Extreme Observations
+Template:   base.univariate.ExtObs
+Path:       Univariate.ArrDelay.ExtremeObs
+-------------
+
+Output Added:
+-------------
+Name:       MissingValues
+Label:      Missing Values
+Template:   base.univariate.Missings
+Path:       Univariate.ArrDelay.MissingValues
+-------------
+
+Output Added:
+-------------
+Name:       Histogram
+Label:      Panel 1
+Template:   base.univariate.Graphics.Histogram
+Path:       Univariate.ArrDelay.Histogram.Histogram
+-------------
+
+Output Added:
+-------------
+Name:       Histogram
+Label:      Panel 1
+Template:   base.univariate.Graphics.Histogram
+Path:       Univariate.ArrDelay.Histogram.Histogram
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   base.univariate.FitParms
+Path:       Univariate.ArrDelay.Histogram.Normal.ParameterEstimates
+-------------
+
+Output Added:
+-------------
+Name:       GoodnessOfFit
+Label:      Goodness of Fit
+Template:   base.univariate.FitGood
+Path:       Univariate.ArrDelay.Histogram.Normal.GoodnessOfFit
+-------------
+
+Output Added:
+-------------
+Name:       FitQuantiles
+Label:      Quantiles
+Template:   base.univariate.FitQuant
+Path:       Univariate.ArrDelay.Histogram.Normal.FitQuantiles
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   base.univariate.FitParms
+Path:       Univariate.ArrDelay.Histogram.Lognormal.ParameterEstimates
+-------------
+
+Output Added:
+-------------
+Name:       GoodnessOfFit
+Label:      Goodness of Fit
+Template:   base.univariate.FitGood
+Path:       Univariate.ArrDelay.Histogram.Lognormal.GoodnessOfFit
+-------------
+
+Output Added:
+-------------
+Name:       FitQuantiles
+Label:      Quantiles
+Template:   base.univariate.FitQuant
+Path:       Univariate.ArrDelay.Histogram.Lognormal.FitQuantiles
+-------------
+
+Output Added:
+-------------
+Name:       Moments
+Label:      Moments
+Template:   base.univariate.Moments
+Path:       Univariate.ArrDelayLag.Moments
+-------------
+
+Output Added:
+-------------
+Name:       BasicMeasures
+Label:      Basic Measures of Location and Variability
+Template:   base.univariate.Measures
+Path:       Univariate.ArrDelayLag.BasicMeasures
+-------------
+
+Output Added:
+-------------
+Name:       TestsForLocation
+Label:      Tests For Location
+Template:   base.univariate.Location
+Path:       Univariate.ArrDelayLag.TestsForLocation
+-------------
+
+Output Added:
+-------------
+Name:       Quantiles
+Label:      Quantiles
+Template:   base.univariate.Quantiles
+Path:       Univariate.ArrDelayLag.Quantiles
+-------------
+
+Output Added:
+-------------
+Name:       ExtremeObs
+Label:      Extreme Observations
+Template:   base.univariate.ExtObs
+Path:       Univariate.ArrDelayLag.ExtremeObs
+-------------
+
+Output Added:
+-------------
+Name:       MissingValues
+Label:      Missing Values
+Template:   base.univariate.Missings
+Path:       Univariate.ArrDelayLag.MissingValues
+-------------
+
+Output Added:
+-------------
+Name:       Histogram
+Label:      Panel 1
+Template:   base.univariate.Graphics.Histogram
+Path:       Univariate.ArrDelayLag.Histogram.Histogram
+-------------
+
+Output Added:
+-------------
+Name:       Histogram
+Label:      Panel 1
+Template:   base.univariate.Graphics.Histogram
+Path:       Univariate.ArrDelayLag.Histogram.Histogram
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   base.univariate.FitParms
+Path:       Univariate.ArrDelayLag.Histogram.Normal.ParameterEstimates
+-------------
+
+Output Added:
+-------------
+Name:       GoodnessOfFit
+Label:      Goodness of Fit
+Template:   base.univariate.FitGood
+Path:       Univariate.ArrDelayLag.Histogram.Normal.GoodnessOfFit
+-------------
+
+Output Added:
+-------------
+Name:       FitQuantiles
+Label:      Quantiles
+Template:   base.univariate.FitQuant
+Path:       Univariate.ArrDelayLag.Histogram.Normal.FitQuantiles
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   base.univariate.FitParms
+Path:       Univariate.ArrDelayLag.Histogram.Lognormal.ParameterEstimates
+-------------
+
+Output Added:
+-------------
+Name:       GoodnessOfFit
+Label:      Goodness of Fit
+Template:   base.univariate.FitGood
+Path:       Univariate.ArrDelayLag.Histogram.Lognormal.GoodnessOfFit
+-------------
+
+Output Added:
+-------------
+Name:       FitQuantiles
+Label:      Quantiles
+Template:   base.univariate.FitQuant
+Path:       Univariate.ArrDelayLag.Histogram.Lognormal.FitQuantiles
+-------------
+
+Output Added:
+-------------
+Name:       Moments
+Label:      Moments
+Template:   base.univariate.Moments
+Path:       Univariate.ArrDelayLag2.Moments
+-------------
+
+Output Added:
+-------------
+Name:       BasicMeasures
+Label:      Basic Measures of Location and Variability
+Template:   base.univariate.Measures
+Path:       Univariate.ArrDelayLag2.BasicMeasures
+-------------
+
+Output Added:
+-------------
+Name:       TestsForLocation
+Label:      Tests For Location
+Template:   base.univariate.Location
+Path:       Univariate.ArrDelayLag2.TestsForLocation
+-------------
+
+Output Added:
+-------------
+Name:       Quantiles
+Label:      Quantiles
+Template:   base.univariate.Quantiles
+Path:       Univariate.ArrDelayLag2.Quantiles
+-------------
+
+Output Added:
+-------------
+Name:       ExtremeObs
+Label:      Extreme Observations
+Template:   base.univariate.ExtObs
+Path:       Univariate.ArrDelayLag2.ExtremeObs
+-------------
+
+Output Added:
+-------------
+Name:       MissingValues
+Label:      Missing Values
+Template:   base.univariate.Missings
+Path:       Univariate.ArrDelayLag2.MissingValues
+-------------
+
+Output Added:
+-------------
+Name:       Histogram
+Label:      Panel 1
+Template:   base.univariate.Graphics.Histogram
+Path:       Univariate.ArrDelayLag2.Histogram.Histogram
+-------------
+
+Output Added:
+-------------
+Name:       Histogram
+Label:      Panel 1
+Template:   base.univariate.Graphics.Histogram
+Path:       Univariate.ArrDelayLag2.Histogram.Histogram
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   base.univariate.FitParms
+Path:       Univariate.ArrDelayLag2.Histogram.Normal.ParameterEstimates
+-------------
+
+Output Added:
+-------------
+Name:       GoodnessOfFit
+Label:      Goodness of Fit
+Template:   base.univariate.FitGood
+Path:       Univariate.ArrDelayLag2.Histogram.Normal.GoodnessOfFit
+-------------
+
+Output Added:
+-------------
+Name:       FitQuantiles
+Label:      Quantiles
+Template:   base.univariate.FitQuant
+Path:       Univariate.ArrDelayLag2.Histogram.Normal.FitQuantiles
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   base.univariate.FitParms
+Path:       Univariate.ArrDelayLag2.Histogram.Lognormal.ParameterEstimates
+-------------
+
+Output Added:
+-------------
+Name:       GoodnessOfFit
+Label:      Goodness of Fit
+Template:   base.univariate.FitGood
+Path:       Univariate.ArrDelayLag2.Histogram.Lognormal.GoodnessOfFit
+-------------
+
+Output Added:
+-------------
+Name:       FitQuantiles
+Label:      Quantiles
+Template:   base.univariate.FitQuant
+Path:       Univariate.ArrDelayLag2.Histogram.Lognormal.FitQuantiles
+-------------
+NOTE: PROCEDURE UNIVARIATE used (Total process time):
+      real time           16.71 seconds
+      cpu time            4.73 seconds
+
+
+175
+176  ods graphics on;
+177  proc corr data=BTS_lag_delays2_201506 nomiss outp=BTSCorr;
+178     var DepDelay ArrDelay ArrDelayLag ArrDelayLag2;
+179  run;
+
+
+Output Added:
+-------------
+Name:       VarInformation
+Label:      Variables Information
+Template:   base.corr.VarInfo
+Path:       Corr.VarInformation
+-------------
+
+Output Added:
+-------------
+Name:       SimpleStats
+Label:      Simple Statistics
+Template:   base.corr.UniStat
+Path:       Corr.SimpleStats
+-------------
+
+Output Added:
+-------------
+Name:       PearsonCorr
+Label:      Pearson Correlations
+Template:   base.corr.StackedMatrix
+Path:       Corr.PearsonCorr
+-------------
+NOTE: The data set WORK.BTSCORR has 7 observations and 6 variables.
+NOTE: PROCEDURE CORR used (Total process time):
+      real time           2.15 seconds
+      cpu time            0.32 seconds
+
+
+180
+181  proc print data = BTSCorr;
+182  run;
+
+
+Output Added:
+-------------
+Name:       Print
+Label:      Data Set WORK.BTSCORR
+Data Name:  ProcPrintTable
+Path:       Print.Print
+-------------
+NOTE: There were 7 observations read from the data set WORK.BTSCORR.
+NOTE: PROCEDURE PRINT used (Total process time):
+      real time           0.16 seconds
+      cpu time            0.07 seconds
+
+
+183
+184  /* Handling Missing Data*/
+185
+186  data Bts_missing (keep = CRSDepTime SeqNum DepDelayLagInd DepDelayLag DepDelayLagCum ArrDelayLagInd
+187                   ArrDelayLag ArrDelayLagCum DepDelayLag2 ArrDelayLag2 ArrDelay DepDelay) ;
+188  set BTS_lag_delays2_201506;
+189  *array varbl(*) _NUMERIC_ ;
+190  array varbl(*) CRSDepTime SeqNum DepDelayLagInd DepDelayLag DepDelayLagCum ArrDelayLagInd
+191                   ArrDelayLag ArrDelayLagCum DepDelayLag2 ArrDelayLag2 ArrDelay DepDelay;
+192      do i = 1 to dim(varbl) ;
+193          if varbl(i) = . then do ;
+194              output ;
+195              leave ;
+196          end ;
+197      end ;
+198  run ;
+
+NOTE: There were 503897 observations read from the data set WORK.BTS_LAG_DELAYS2_201506.
+NOTE: The data set WORK.BTS_MISSING has 20197 observations and 12 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.45 seconds
+      cpu time            0.45 seconds
+
+
+199
+200  /*********************************************************************************
+201  Which variables have the most missingness?
+202  *********************************************************************************/
+203  proc means data=Bts_missing n nmiss;
+204  var _numeric_ ;
+205  run ;
+
+
+Output Added:
+-------------
+Name:       Summary
+Label:      Summary statistics
+Template:   base.summary
+Path:       Means.Summary
+-------------
+NOTE: There were 20197 observations read from the data set WORK.BTS_MISSING.
+NOTE: PROCEDURE MEANS used (Total process time):
+      real time           0.79 seconds
+      cpu time            0.04 seconds
+
+
+206
+207
+208  /********************************************************************************
+209  Let's also look at the data points that have missing values
+210  ********************************************************************************/
+211  data Bts_missing_detail ; * (keep = ArrDelay CRSDepTime seqnum DepDelay DepDelayLagInd DepDelayLag DepDelayLagCum
+211! ArrDelayLagInd ArrDelayLag ArrDelayLagCum) ;
+212  set Bts_lag_delays_201506 ;
+213  if ArrDelay = . ;
+214  run ;
+
+NOTE: There were 503897 observations read from the data set WORK.BTS_LAG_DELAYS_201506.
+NOTE: The data set WORK.BTS_MISSING_DETAIL has 11050 observations and 116 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.30 seconds
+      cpu time            0.31 seconds
+
+
+215
+216  proc sort data=Bts_missing_detail ;
+217  by cancelled ;
+218  run ;
+
+NOTE: There were 11050 observations read from the data set WORK.BTS_MISSING_DETAIL.
+NOTE: The data set WORK.BTS_MISSING_DETAIL has 11050 observations and 116 variables.
+NOTE: PROCEDURE SORT used (Total process time):
+      real time           0.03 seconds
+      cpu time            0.03 seconds
+
+
+219
+220  /************************************************************************************
+221  Are there non-missing variables strongly associated with missingness?
+222  ************************************************************************************/
+223
+224  proc freq data=Bts_missing_detail ;
+225  tables Cancelled ;
+226  output out=BTS_miss_counts ;
+227  run ;
+
+WARNING: No OUTPUT data set is produced because no statistics are requested in the corresponding TABLES statement.
+
+Output Added:
+-------------
+Name:       OneWayFreqs
+Label:      One-Way Frequencies
+Template:   Base.Freq.OneWayFreqs
+Path:       Freq.Table1.OneWayFreqs
+-------------
+NOTE: There were 11050 observations read from the data set WORK.BTS_MISSING_DETAIL.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.23 seconds
+      cpu time            0.07 seconds
+
+
+228
+229
+230
+231
+232  /*OLS Regression Model*/
+233  proc reg data=BTS_lag_delays2_201506 ;
+234  model DepDelay = CRSDepTime SeqNum DepDelayLagInd DepDelayLag DepDelayLagCum ArrDelayLagInd
+235                   ArrDelayLag ArrDelayLagCum DepDelayLag2 ArrDelayLag2 /vif;
+236  where cancelled=0;
+237  run ;
+
+
+Output Added:
+-------------
+Name:       NObs
+Label:      Number of Observations
+Template:   Stat.Reg.NObs
+Path:       Reg.MODEL1.Fit.DepDelay.NObs
+-------------
+
+Output Added:
+-------------
+Name:       ANOVA
+Label:      Analysis of Variance
+Template:   Stat.REG.ANOVA
+Path:       Reg.MODEL1.Fit.DepDelay.ANOVA
+-------------
+
+Output Added:
+-------------
+Name:       FitStatistics
+Label:      Fit Statistics
+Template:   Stat.REG.FitStatistics
+Path:       Reg.MODEL1.Fit.DepDelay.FitStatistics
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   Stat.REG.ParameterEstimates
+Path:       Reg.MODEL1.Fit.DepDelay.ParameterEstimates
+-------------
+WARNING: ODS graphics with more than 5000 points have been suppressed. Use the PLOTS(MAXPOINTS= ) option in the PROC REG
+         statement to change or override the cutoff.
+238  quit ;
+
+NOTE: PROCEDURE REG used (Total process time):
+      real time           2.99 seconds
+      cpu time            1.06 seconds
+
+
+239
+240  /*Logistic Regression*/
+241  data BTS201506_Logistic;
+242  retain DepDelayIND 0;
+243  set BTS_lag_delays2_201506;
+244  by carrier;
+245  if DepDelay >15 then do;
+246      DepDelayIND =1;
+247      end;
+248  else do;
+249      DepDelayIND=0;
+250      end;
+251  run;
+
+NOTE: There were 503897 observations read from the data set WORK.BTS_LAG_DELAYS2_201506.
+NOTE: The data set WORK.BTS201506_LOGISTIC has 503897 observations and 123 variables.
+NOTE: DATA statement used (Total process time):
+      real time           3.74 seconds
+      cpu time            1.04 seconds
+
+
+252
+253  proc logistic data = BTS201506_Logistic ;
+254  model DepDelayIND = CRSDepTime SeqNum DepDelayLagInd DepDelayLag DepDelayLagCum ArrDelayLagInd
+255                   ArrDelayLag ArrDelayLagCum DepDelayLag2 ArrDelayLag2;
+256  where cancelled=0;
+257  by carrier;
+258  run ;
+
+
+Output Added:
+-------------
+Name:       ModelInfo
+Label:      Model Information
+Template:   Stat.Logistic.ModelInfo
+Path:       Logistic.ByGroup1.ModelInfo
+-------------
+
+Output Added:
+-------------
+Name:       NObs
+Label:      Observations Summary
+Template:   Stat.Logistic.NObs
+Path:       Logistic.ByGroup1.NObs
+-------------
+
+Output Added:
+-------------
+Name:       ResponseProfile
+Label:      Response Profile
+Template:   Stat.Logistic.ResponseProfile
+Path:       Logistic.ByGroup1.ResponseProfile
+-------------
+NOTE: PROC LOGISTIC is modeling the probability that DepDelayIND=0. One way to change this to model the probability that
+      DepDelayIND=1 is to specify the response variable option EVENT='1'.
+
+Output Added:
+-------------
+Name:       ConvergenceStatus
+Label:      Convergence Status
+Template:   Stat.Logistic.MConvergenceStatus
+Path:       Logistic.ByGroup1.ConvergenceStatus
+-------------
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+
+Output Added:
+-------------
+Name:       FitStatistics
+Label:      Fit Statistics
+Template:   Stat.Logistic.FitStatistics
+Path:       Logistic.ByGroup1.FitStatistics
+-------------
+
+Output Added:
+-------------
+Name:       GlobalTests
+Label:      Global Tests
+Template:   Stat.Logistic.GlobalTests
+Path:       Logistic.ByGroup1.GlobalTests
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   Stat.Logistic.ParameterEstimates
+Path:       Logistic.ByGroup1.ParameterEstimates
+-------------
+
+Output Added:
+-------------
+Name:       OddsRatios
+Label:      Odds Ratios
+Template:   Stat.Logistic.OddsRatios
+Path:       Logistic.ByGroup1.OddsRatios
+-------------
+
+Output Added:
+-------------
+Name:       Association
+Label:      Association Statistics
+Template:   Stat.Logistic.Association
+Path:       Logistic.ByGroup1.Association
+-------------
+NOTE: The above message was for the following BY group:
+      Carrier=AA
+
+Output Added:
+-------------
+Name:       ModelInfo
+Label:      Model Information
+Template:   Stat.Logistic.ModelInfo
+Path:       Logistic.ByGroup2.ModelInfo
+-------------
+
+Output Added:
+-------------
+Name:       NObs
+Label:      Observations Summary
+Template:   Stat.Logistic.NObs
+Path:       Logistic.ByGroup2.NObs
+-------------
+
+Output Added:
+-------------
+Name:       ResponseProfile
+Label:      Response Profile
+Template:   Stat.Logistic.ResponseProfile
+Path:       Logistic.ByGroup2.ResponseProfile
+-------------
+NOTE: PROC LOGISTIC is modeling the probability that DepDelayIND=0. One way to change this to model the probability that
+      DepDelayIND=1 is to specify the response variable option EVENT='1'.
+
+Output Added:
+-------------
+Name:       ConvergenceStatus
+Label:      Convergence Status
+Template:   Stat.Logistic.MConvergenceStatus
+Path:       Logistic.ByGroup2.ConvergenceStatus
+-------------
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+
+Output Added:
+-------------
+Name:       FitStatistics
+Label:      Fit Statistics
+Template:   Stat.Logistic.FitStatistics
+Path:       Logistic.ByGroup2.FitStatistics
+-------------
+
+Output Added:
+-------------
+Name:       GlobalTests
+Label:      Global Tests
+Template:   Stat.Logistic.GlobalTests
+Path:       Logistic.ByGroup2.GlobalTests
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   Stat.Logistic.ParameterEstimates
+Path:       Logistic.ByGroup2.ParameterEstimates
+-------------
+
+Output Added:
+-------------
+Name:       OddsRatios
+Label:      Odds Ratios
+Template:   Stat.Logistic.OddsRatios
+Path:       Logistic.ByGroup2.OddsRatios
+-------------
+
+Output Added:
+-------------
+Name:       Association
+Label:      Association Statistics
+Template:   Stat.Logistic.Association
+Path:       Logistic.ByGroup2.Association
+-------------
+NOTE: The above message was for the following BY group:
+      Carrier=AS
+
+Output Added:
+-------------
+Name:       ModelInfo
+Label:      Model Information
+Template:   Stat.Logistic.ModelInfo
+Path:       Logistic.ByGroup3.ModelInfo
+-------------
+
+Output Added:
+-------------
+Name:       NObs
+Label:      Observations Summary
+Template:   Stat.Logistic.NObs
+Path:       Logistic.ByGroup3.NObs
+-------------
+
+Output Added:
+-------------
+Name:       ResponseProfile
+Label:      Response Profile
+Template:   Stat.Logistic.ResponseProfile
+Path:       Logistic.ByGroup3.ResponseProfile
+-------------
+NOTE: PROC LOGISTIC is modeling the probability that DepDelayIND=0. One way to change this to model the probability that
+      DepDelayIND=1 is to specify the response variable option EVENT='1'.
+
+Output Added:
+-------------
+Name:       ConvergenceStatus
+Label:      Convergence Status
+Template:   Stat.Logistic.MConvergenceStatus
+Path:       Logistic.ByGroup3.ConvergenceStatus
+-------------
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+
+Output Added:
+-------------
+Name:       FitStatistics
+Label:      Fit Statistics
+Template:   Stat.Logistic.FitStatistics
+Path:       Logistic.ByGroup3.FitStatistics
+-------------
+
+Output Added:
+-------------
+Name:       GlobalTests
+Label:      Global Tests
+Template:   Stat.Logistic.GlobalTests
+Path:       Logistic.ByGroup3.GlobalTests
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   Stat.Logistic.ParameterEstimates
+Path:       Logistic.ByGroup3.ParameterEstimates
+-------------
+
+Output Added:
+-------------
+Name:       OddsRatios
+Label:      Odds Ratios
+Template:   Stat.Logistic.OddsRatios
+Path:       Logistic.ByGroup3.OddsRatios
+-------------
+
+Output Added:
+-------------
+Name:       Association
+Label:      Association Statistics
+Template:   Stat.Logistic.Association
+Path:       Logistic.ByGroup3.Association
+-------------
+NOTE: The above message was for the following BY group:
+      Carrier=B6
+
+Output Added:
+-------------
+Name:       ModelInfo
+Label:      Model Information
+Template:   Stat.Logistic.ModelInfo
+Path:       Logistic.ByGroup4.ModelInfo
+-------------
+
+Output Added:
+-------------
+Name:       NObs
+Label:      Observations Summary
+Template:   Stat.Logistic.NObs
+Path:       Logistic.ByGroup4.NObs
+-------------
+
+Output Added:
+-------------
+Name:       ResponseProfile
+Label:      Response Profile
+Template:   Stat.Logistic.ResponseProfile
+Path:       Logistic.ByGroup4.ResponseProfile
+-------------
+NOTE: PROC LOGISTIC is modeling the probability that DepDelayIND=0. One way to change this to model the probability that
+      DepDelayIND=1 is to specify the response variable option EVENT='1'.
+
+Output Added:
+-------------
+Name:       ConvergenceStatus
+Label:      Convergence Status
+Template:   Stat.Logistic.MConvergenceStatus
+Path:       Logistic.ByGroup4.ConvergenceStatus
+-------------
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+
+Output Added:
+-------------
+Name:       FitStatistics
+Label:      Fit Statistics
+Template:   Stat.Logistic.FitStatistics
+Path:       Logistic.ByGroup4.FitStatistics
+-------------
+
+Output Added:
+-------------
+Name:       GlobalTests
+Label:      Global Tests
+Template:   Stat.Logistic.GlobalTests
+Path:       Logistic.ByGroup4.GlobalTests
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   Stat.Logistic.ParameterEstimates
+Path:       Logistic.ByGroup4.ParameterEstimates
+-------------
+
+Output Added:
+-------------
+Name:       OddsRatios
+Label:      Odds Ratios
+Template:   Stat.Logistic.OddsRatios
+Path:       Logistic.ByGroup4.OddsRatios
+-------------
+
+Output Added:
+-------------
+Name:       Association
+Label:      Association Statistics
+Template:   Stat.Logistic.Association
+Path:       Logistic.ByGroup4.Association
+-------------
+NOTE: The above message was for the following BY group:
+      Carrier=DL
+
+Output Added:
+-------------
+Name:       ModelInfo
+Label:      Model Information
+Template:   Stat.Logistic.ModelInfo
+Path:       Logistic.ByGroup5.ModelInfo
+-------------
+
+Output Added:
+-------------
+Name:       NObs
+Label:      Observations Summary
+Template:   Stat.Logistic.NObs
+Path:       Logistic.ByGroup5.NObs
+-------------
+
+Output Added:
+-------------
+Name:       ResponseProfile
+Label:      Response Profile
+Template:   Stat.Logistic.ResponseProfile
+Path:       Logistic.ByGroup5.ResponseProfile
+-------------
+NOTE: PROC LOGISTIC is modeling the probability that DepDelayIND=0. One way to change this to model the probability that
+      DepDelayIND=1 is to specify the response variable option EVENT='1'.
+
+Output Added:
+-------------
+Name:       ConvergenceStatus
+Label:      Convergence Status
+Template:   Stat.Logistic.MConvergenceStatus
+Path:       Logistic.ByGroup5.ConvergenceStatus
+-------------
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+
+Output Added:
+-------------
+Name:       FitStatistics
+Label:      Fit Statistics
+Template:   Stat.Logistic.FitStatistics
+Path:       Logistic.ByGroup5.FitStatistics
+-------------
+
+Output Added:
+-------------
+Name:       GlobalTests
+Label:      Global Tests
+Template:   Stat.Logistic.GlobalTests
+Path:       Logistic.ByGroup5.GlobalTests
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   Stat.Logistic.ParameterEstimates
+Path:       Logistic.ByGroup5.ParameterEstimates
+-------------
+
+Output Added:
+-------------
+Name:       OddsRatios
+Label:      Odds Ratios
+Template:   Stat.Logistic.OddsRatios
+Path:       Logistic.ByGroup5.OddsRatios
+-------------
+
+Output Added:
+-------------
+Name:       Association
+Label:      Association Statistics
+Template:   Stat.Logistic.Association
+Path:       Logistic.ByGroup5.Association
+-------------
+NOTE: The above message was for the following BY group:
+      Carrier=EV
+
+Output Added:
+-------------
+Name:       ModelInfo
+Label:      Model Information
+Template:   Stat.Logistic.ModelInfo
+Path:       Logistic.ByGroup6.ModelInfo
+-------------
+
+Output Added:
+-------------
+Name:       NObs
+Label:      Observations Summary
+Template:   Stat.Logistic.NObs
+Path:       Logistic.ByGroup6.NObs
+-------------
+
+Output Added:
+-------------
+Name:       ResponseProfile
+Label:      Response Profile
+Template:   Stat.Logistic.ResponseProfile
+Path:       Logistic.ByGroup6.ResponseProfile
+-------------
+NOTE: PROC LOGISTIC is modeling the probability that DepDelayIND=0. One way to change this to model the probability that
+      DepDelayIND=1 is to specify the response variable option EVENT='1'.
+
+Output Added:
+-------------
+Name:       ConvergenceStatus
+Label:      Convergence Status
+Template:   Stat.Logistic.MConvergenceStatus
+Path:       Logistic.ByGroup6.ConvergenceStatus
+-------------
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+
+Output Added:
+-------------
+Name:       FitStatistics
+Label:      Fit Statistics
+Template:   Stat.Logistic.FitStatistics
+Path:       Logistic.ByGroup6.FitStatistics
+-------------
+
+Output Added:
+-------------
+Name:       GlobalTests
+Label:      Global Tests
+Template:   Stat.Logistic.GlobalTests
+Path:       Logistic.ByGroup6.GlobalTests
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   Stat.Logistic.ParameterEstimates
+Path:       Logistic.ByGroup6.ParameterEstimates
+-------------
+
+Output Added:
+-------------
+Name:       OddsRatios
+Label:      Odds Ratios
+Template:   Stat.Logistic.OddsRatios
+Path:       Logistic.ByGroup6.OddsRatios
+-------------
+
+Output Added:
+-------------
+Name:       Association
+Label:      Association Statistics
+Template:   Stat.Logistic.Association
+Path:       Logistic.ByGroup6.Association
+-------------
+NOTE: The above message was for the following BY group:
+      Carrier=F9
+
+Output Added:
+-------------
+Name:       ModelInfo
+Label:      Model Information
+Template:   Stat.Logistic.ModelInfo
+Path:       Logistic.ByGroup7.ModelInfo
+-------------
+
+Output Added:
+-------------
+Name:       NObs
+Label:      Observations Summary
+Template:   Stat.Logistic.NObs
+Path:       Logistic.ByGroup7.NObs
+-------------
+
+Output Added:
+-------------
+Name:       ResponseProfile
+Label:      Response Profile
+Template:   Stat.Logistic.ResponseProfile
+Path:       Logistic.ByGroup7.ResponseProfile
+-------------
+NOTE: PROC LOGISTIC is modeling the probability that DepDelayIND=0. One way to change this to model the probability that
+      DepDelayIND=1 is to specify the response variable option EVENT='1'.
+
+Output Added:
+-------------
+Name:       ConvergenceStatus
+Label:      Convergence Status
+Template:   Stat.Logistic.MConvergenceStatus
+Path:       Logistic.ByGroup7.ConvergenceStatus
+-------------
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+
+Output Added:
+-------------
+Name:       FitStatistics
+Label:      Fit Statistics
+Template:   Stat.Logistic.FitStatistics
+Path:       Logistic.ByGroup7.FitStatistics
+-------------
+
+Output Added:
+-------------
+Name:       GlobalTests
+Label:      Global Tests
+Template:   Stat.Logistic.GlobalTests
+Path:       Logistic.ByGroup7.GlobalTests
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   Stat.Logistic.ParameterEstimates
+Path:       Logistic.ByGroup7.ParameterEstimates
+-------------
+
+Output Added:
+-------------
+Name:       OddsRatios
+Label:      Odds Ratios
+Template:   Stat.Logistic.OddsRatios
+Path:       Logistic.ByGroup7.OddsRatios
+-------------
+
+Output Added:
+-------------
+Name:       Association
+Label:      Association Statistics
+Template:   Stat.Logistic.Association
+Path:       Logistic.ByGroup7.Association
+-------------
+NOTE: The above message was for the following BY group:
+      Carrier=HA
+
+Output Added:
+-------------
+Name:       ModelInfo
+Label:      Model Information
+Template:   Stat.Logistic.ModelInfo
+Path:       Logistic.ByGroup8.ModelInfo
+-------------
+
+Output Added:
+-------------
+Name:       NObs
+Label:      Observations Summary
+Template:   Stat.Logistic.NObs
+Path:       Logistic.ByGroup8.NObs
+-------------
+
+Output Added:
+-------------
+Name:       ResponseProfile
+Label:      Response Profile
+Template:   Stat.Logistic.ResponseProfile
+Path:       Logistic.ByGroup8.ResponseProfile
+-------------
+NOTE: PROC LOGISTIC is modeling the probability that DepDelayIND=0. One way to change this to model the probability that
+      DepDelayIND=1 is to specify the response variable option EVENT='1'.
+
+Output Added:
+-------------
+Name:       ConvergenceStatus
+Label:      Convergence Status
+Template:   Stat.Logistic.MConvergenceStatus
+Path:       Logistic.ByGroup8.ConvergenceStatus
+-------------
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+
+Output Added:
+-------------
+Name:       FitStatistics
+Label:      Fit Statistics
+Template:   Stat.Logistic.FitStatistics
+Path:       Logistic.ByGroup8.FitStatistics
+-------------
+
+Output Added:
+-------------
+Name:       GlobalTests
+Label:      Global Tests
+Template:   Stat.Logistic.GlobalTests
+Path:       Logistic.ByGroup8.GlobalTests
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   Stat.Logistic.ParameterEstimates
+Path:       Logistic.ByGroup8.ParameterEstimates
+-------------
+
+Output Added:
+-------------
+Name:       OddsRatios
+Label:      Odds Ratios
+Template:   Stat.Logistic.OddsRatios
+Path:       Logistic.ByGroup8.OddsRatios
+-------------
+
+Output Added:
+-------------
+Name:       Association
+Label:      Association Statistics
+Template:   Stat.Logistic.Association
+Path:       Logistic.ByGroup8.Association
+-------------
+NOTE: The above message was for the following BY group:
+      Carrier=MQ
+
+Output Added:
+-------------
+Name:       ModelInfo
+Label:      Model Information
+Template:   Stat.Logistic.ModelInfo
+Path:       Logistic.ByGroup9.ModelInfo
+-------------
+
+Output Added:
+-------------
+Name:       NObs
+Label:      Observations Summary
+Template:   Stat.Logistic.NObs
+Path:       Logistic.ByGroup9.NObs
+-------------
+
+Output Added:
+-------------
+Name:       ResponseProfile
+Label:      Response Profile
+Template:   Stat.Logistic.ResponseProfile
+Path:       Logistic.ByGroup9.ResponseProfile
+-------------
+NOTE: PROC LOGISTIC is modeling the probability that DepDelayIND=0. One way to change this to model the probability that
+      DepDelayIND=1 is to specify the response variable option EVENT='1'.
+
+Output Added:
+-------------
+Name:       ConvergenceStatus
+Label:      Convergence Status
+Template:   Stat.Logistic.MConvergenceStatus
+Path:       Logistic.ByGroup9.ConvergenceStatus
+-------------
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+
+Output Added:
+-------------
+Name:       FitStatistics
+Label:      Fit Statistics
+Template:   Stat.Logistic.FitStatistics
+Path:       Logistic.ByGroup9.FitStatistics
+-------------
+
+Output Added:
+-------------
+Name:       GlobalTests
+Label:      Global Tests
+Template:   Stat.Logistic.GlobalTests
+Path:       Logistic.ByGroup9.GlobalTests
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   Stat.Logistic.ParameterEstimates
+Path:       Logistic.ByGroup9.ParameterEstimates
+-------------
+
+Output Added:
+-------------
+Name:       OddsRatios
+Label:      Odds Ratios
+Template:   Stat.Logistic.OddsRatios
+Path:       Logistic.ByGroup9.OddsRatios
+-------------
+
+Output Added:
+-------------
+Name:       Association
+Label:      Association Statistics
+Template:   Stat.Logistic.Association
+Path:       Logistic.ByGroup9.Association
+-------------
+NOTE: The above message was for the following BY group:
+      Carrier=NK
+
+Output Added:
+-------------
+Name:       ModelInfo
+Label:      Model Information
+Template:   Stat.Logistic.ModelInfo
+Path:       Logistic.ByGroup10.ModelInfo
+-------------
+
+Output Added:
+-------------
+Name:       NObs
+Label:      Observations Summary
+Template:   Stat.Logistic.NObs
+Path:       Logistic.ByGroup10.NObs
+-------------
+
+Output Added:
+-------------
+Name:       ResponseProfile
+Label:      Response Profile
+Template:   Stat.Logistic.ResponseProfile
+Path:       Logistic.ByGroup10.ResponseProfile
+-------------
+NOTE: PROC LOGISTIC is modeling the probability that DepDelayIND=0. One way to change this to model the probability that
+      DepDelayIND=1 is to specify the response variable option EVENT='1'.
+
+Output Added:
+-------------
+Name:       ConvergenceStatus
+Label:      Convergence Status
+Template:   Stat.Logistic.MConvergenceStatus
+Path:       Logistic.ByGroup10.ConvergenceStatus
+-------------
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+
+Output Added:
+-------------
+Name:       FitStatistics
+Label:      Fit Statistics
+Template:   Stat.Logistic.FitStatistics
+Path:       Logistic.ByGroup10.FitStatistics
+-------------
+
+Output Added:
+-------------
+Name:       GlobalTests
+Label:      Global Tests
+Template:   Stat.Logistic.GlobalTests
+Path:       Logistic.ByGroup10.GlobalTests
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   Stat.Logistic.ParameterEstimates
+Path:       Logistic.ByGroup10.ParameterEstimates
+-------------
+
+Output Added:
+-------------
+Name:       OddsRatios
+Label:      Odds Ratios
+Template:   Stat.Logistic.OddsRatios
+Path:       Logistic.ByGroup10.OddsRatios
+-------------
+
+Output Added:
+-------------
+Name:       Association
+Label:      Association Statistics
+Template:   Stat.Logistic.Association
+Path:       Logistic.ByGroup10.Association
+-------------
+NOTE: The above message was for the following BY group:
+      Carrier=OO
+
+Output Added:
+-------------
+Name:       ModelInfo
+Label:      Model Information
+Template:   Stat.Logistic.ModelInfo
+Path:       Logistic.ByGroup11.ModelInfo
+-------------
+
+Output Added:
+-------------
+Name:       NObs
+Label:      Observations Summary
+Template:   Stat.Logistic.NObs
+Path:       Logistic.ByGroup11.NObs
+-------------
+
+Output Added:
+-------------
+Name:       ResponseProfile
+Label:      Response Profile
+Template:   Stat.Logistic.ResponseProfile
+Path:       Logistic.ByGroup11.ResponseProfile
+-------------
+NOTE: PROC LOGISTIC is modeling the probability that DepDelayIND=0. One way to change this to model the probability that
+      DepDelayIND=1 is to specify the response variable option EVENT='1'.
+
+Output Added:
+-------------
+Name:       ConvergenceStatus
+Label:      Convergence Status
+Template:   Stat.Logistic.MConvergenceStatus
+Path:       Logistic.ByGroup11.ConvergenceStatus
+-------------
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+
+Output Added:
+-------------
+Name:       FitStatistics
+Label:      Fit Statistics
+Template:   Stat.Logistic.FitStatistics
+Path:       Logistic.ByGroup11.FitStatistics
+-------------
+
+Output Added:
+-------------
+Name:       GlobalTests
+Label:      Global Tests
+Template:   Stat.Logistic.GlobalTests
+Path:       Logistic.ByGroup11.GlobalTests
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   Stat.Logistic.ParameterEstimates
+Path:       Logistic.ByGroup11.ParameterEstimates
+-------------
+
+Output Added:
+-------------
+Name:       OddsRatios
+Label:      Odds Ratios
+Template:   Stat.Logistic.OddsRatios
+Path:       Logistic.ByGroup11.OddsRatios
+-------------
+
+Output Added:
+-------------
+Name:       Association
+Label:      Association Statistics
+Template:   Stat.Logistic.Association
+Path:       Logistic.ByGroup11.Association
+-------------
+NOTE: The above message was for the following BY group:
+      Carrier=UA
+
+Output Added:
+-------------
+Name:       ModelInfo
+Label:      Model Information
+Template:   Stat.Logistic.ModelInfo
+Path:       Logistic.ByGroup12.ModelInfo
+-------------
+
+Output Added:
+-------------
+Name:       NObs
+Label:      Observations Summary
+Template:   Stat.Logistic.NObs
+Path:       Logistic.ByGroup12.NObs
+-------------
+
+Output Added:
+-------------
+Name:       ResponseProfile
+Label:      Response Profile
+Template:   Stat.Logistic.ResponseProfile
+Path:       Logistic.ByGroup12.ResponseProfile
+-------------
+NOTE: PROC LOGISTIC is modeling the probability that DepDelayIND=0. One way to change this to model the probability that
+      DepDelayIND=1 is to specify the response variable option EVENT='1'.
+
+Output Added:
+-------------
+Name:       ConvergenceStatus
+Label:      Convergence Status
+Template:   Stat.Logistic.MConvergenceStatus
+Path:       Logistic.ByGroup12.ConvergenceStatus
+-------------
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+
+Output Added:
+-------------
+Name:       FitStatistics
+Label:      Fit Statistics
+Template:   Stat.Logistic.FitStatistics
+Path:       Logistic.ByGroup12.FitStatistics
+-------------
+
+Output Added:
+-------------
+Name:       GlobalTests
+Label:      Global Tests
+Template:   Stat.Logistic.GlobalTests
+Path:       Logistic.ByGroup12.GlobalTests
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   Stat.Logistic.ParameterEstimates
+Path:       Logistic.ByGroup12.ParameterEstimates
+-------------
+
+Output Added:
+-------------
+Name:       OddsRatios
+Label:      Odds Ratios
+Template:   Stat.Logistic.OddsRatios
+Path:       Logistic.ByGroup12.OddsRatios
+-------------
+
+Output Added:
+-------------
+Name:       Association
+Label:      Association Statistics
+Template:   Stat.Logistic.Association
+Path:       Logistic.ByGroup12.Association
+-------------
+NOTE: The above message was for the following BY group:
+      Carrier=US
+
+Output Added:
+-------------
+Name:       ModelInfo
+Label:      Model Information
+Template:   Stat.Logistic.ModelInfo
+Path:       Logistic.ByGroup13.ModelInfo
+-------------
+
+Output Added:
+-------------
+Name:       NObs
+Label:      Observations Summary
+Template:   Stat.Logistic.NObs
+Path:       Logistic.ByGroup13.NObs
+-------------
+
+Output Added:
+-------------
+Name:       ResponseProfile
+Label:      Response Profile
+Template:   Stat.Logistic.ResponseProfile
+Path:       Logistic.ByGroup13.ResponseProfile
+-------------
+NOTE: PROC LOGISTIC is modeling the probability that DepDelayIND=0. One way to change this to model the probability that
+      DepDelayIND=1 is to specify the response variable option EVENT='1'.
+
+Output Added:
+-------------
+Name:       ConvergenceStatus
+Label:      Convergence Status
+Template:   Stat.Logistic.MConvergenceStatus
+Path:       Logistic.ByGroup13.ConvergenceStatus
+-------------
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+
+Output Added:
+-------------
+Name:       FitStatistics
+Label:      Fit Statistics
+Template:   Stat.Logistic.FitStatistics
+Path:       Logistic.ByGroup13.FitStatistics
+-------------
+
+Output Added:
+-------------
+Name:       GlobalTests
+Label:      Global Tests
+Template:   Stat.Logistic.GlobalTests
+Path:       Logistic.ByGroup13.GlobalTests
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   Stat.Logistic.ParameterEstimates
+Path:       Logistic.ByGroup13.ParameterEstimates
+-------------
+
+Output Added:
+-------------
+Name:       OddsRatios
+Label:      Odds Ratios
+Template:   Stat.Logistic.OddsRatios
+Path:       Logistic.ByGroup13.OddsRatios
+-------------
+
+Output Added:
+-------------
+Name:       Association
+Label:      Association Statistics
+Template:   Stat.Logistic.Association
+Path:       Logistic.ByGroup13.Association
+-------------
+NOTE: The above message was for the following BY group:
+      Carrier=VX
+
+Output Added:
+-------------
+Name:       ModelInfo
+Label:      Model Information
+Template:   Stat.Logistic.ModelInfo
+Path:       Logistic.ByGroup14.ModelInfo
+-------------
+
+Output Added:
+-------------
+Name:       NObs
+Label:      Observations Summary
+Template:   Stat.Logistic.NObs
+Path:       Logistic.ByGroup14.NObs
+-------------
+
+Output Added:
+-------------
+Name:       ResponseProfile
+Label:      Response Profile
+Template:   Stat.Logistic.ResponseProfile
+Path:       Logistic.ByGroup14.ResponseProfile
+-------------
+NOTE: PROC LOGISTIC is modeling the probability that DepDelayIND=0. One way to change this to model the probability that
+      DepDelayIND=1 is to specify the response variable option EVENT='1'.
+
+Output Added:
+-------------
+Name:       ConvergenceStatus
+Label:      Convergence Status
+Template:   Stat.Logistic.MConvergenceStatus
+Path:       Logistic.ByGroup14.ConvergenceStatus
+-------------
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+
+Output Added:
+-------------
+Name:       FitStatistics
+Label:      Fit Statistics
+Template:   Stat.Logistic.FitStatistics
+Path:       Logistic.ByGroup14.FitStatistics
+-------------
+
+Output Added:
+-------------
+Name:       GlobalTests
+Label:      Global Tests
+Template:   Stat.Logistic.GlobalTests
+Path:       Logistic.ByGroup14.GlobalTests
+-------------
+
+Output Added:
+-------------
+Name:       ParameterEstimates
+Label:      Parameter Estimates
+Template:   Stat.Logistic.ParameterEstimates
+Path:       Logistic.ByGroup14.ParameterEstimates
+-------------
+
+Output Added:
+-------------
+Name:       OddsRatios
+Label:      Odds Ratios
+Template:   Stat.Logistic.OddsRatios
+Path:       Logistic.ByGroup14.OddsRatios
+-------------
+
+Output Added:
+-------------
+Name:       Association
+Label:      Association Statistics
+Template:   Stat.Logistic.Association
+Path:       Logistic.ByGroup14.Association
+-------------
+NOTE: The above message was for the following BY group:
+      Carrier=WN
+NOTE: There were 494777 observations read from the data set WORK.BTS201506_LOGISTIC.
+      WHERE cancelled=0;
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           11.38 seconds
+      cpu time            6.45 seconds
+
+
+259  quit ;
+260
+261
+262  ods trace off;
+263  ods pdf close;
+NOTE: ODS PDF printed 51 pages to E:\1. Ms Academics\3. Spring Courses\3. IDS 594 - SaS\Assign 1\HW1_Q2_OutPut.pdf.
